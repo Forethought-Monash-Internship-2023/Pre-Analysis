@@ -1,0 +1,253 @@
+---
+title: "Data_Export"
+author: "GUI GAO & Chatpisut Magic Makornkhan"
+date: "2023-08-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(tidytext)
+library(stringr)
+library(lubridate)
+```
+
+
+```{r}
+IG_Telco_posts <- read_excel("raw_data/Instagram/collated_posts.xlsx")
+IG_Telco_comments <- read_excel("raw_data/Instagram/collated_comments.xlsx")
+FB_Telco_posts <- read_excel("raw_data/Facebook/telco_collated_fb_posts.xlsx")
+FB_Telco_comments <- read_excel("raw_data/Facebook/telco_collated_fb_comments.xlsx")
+emojis <- read.csv("raw_data/emojis.csv")
+```
+
+
+#Emoji Classification
+```{r}
+rep_str = c("ðŸ˜«" = "A_sad15",
+            "ðŸ˜˜" = "A_kiss1",
+            "ðŸ’" = "E_coupleheart",
+            "ðŸ’–" = "F_sparkleheart",
+            "ðŸ˜¢" = "A_sad6",
+            "ðŸ’œ" = "F_purpleheart",
+            "ðŸ˜" = "A_loveeyes",
+            "â€˜" = "'",
+            "â€™" = "'",
+            "â¤ï¸" = "F_redheart",
+            "ðŸ‘ðŸ½" = "D_clap3",
+            "ðŸ‘ðŸ»" = "D_clap1",
+            "ðŸ‘" = "D_clap",
+            "ðŸ‘‹" = "D_wave",
+            "ðŸ”¥" = "D_fire",
+            "ðŸ™Œ" = "D_td",
+            "ðŸŒˆ" = "K_rainbow",
+            "ðŸ’™" = "F_blueheart",
+            "â™¥ï¸" = "T_card2",
+            "ðŸ™ˆ" = "C_seeno",
+            "ðŸ’›" = "F_yellowheart",
+            "ðŸ’©" = "D_poop",
+            "ðŸˆ" = "H_cat")
+IG_Telco_posts$post_caption <- str_replace_all(IG_Telco_posts$post_caption, rep_str)
+IG_Telco_comments$comment_content <- str_replace_all(IG_Telco_comments$comment_content, rep_str)
+
+FB_Telco_posts$content <- str_replace_all(FB_Telco_posts$content, rep_str)
+FB_Telco_comments$comment_content <- str_replace_all(FB_Telco_comments$comment_content, rep_str)
+```
+
+
+
+#IG Posts Cleaning
+## !! Clean !!
+```{r}
+IG_Telco_posts$actual_time_stamp <- gsub(",", "",
+                                         IG_Telco_posts$actual_time_stamp)
+IG_Telco_posts$actual_time_stamp <- gsub(" ", "/",
+                                IG_Telco_posts$actual_time_stamp)
+
+IG_Telco_posts_wip <- IG_Telco_posts %>%
+  filter(!grepl("Liked", likes)) %>%
+  separate(likes, c("Numbers", "States"), sep = " ")
+  
+IG_Telco_posts_wip$tagged_users <- gsub("\\[|\\]", "", IG_Telco_posts_wip$tagged_users)
+IG_Telco_posts_wip$tagged_users <- gsub("'", "", IG_Telco_posts_wip$tagged_users)
+  
+IG_Telco_posts_wip <- IG_Telco_posts_wip%>% 
+  select(-c("relative_time_stamp", "tagged_locations")) %>% 
+  rename("post_date" = "actual_time_stamp")
+
+## Change Number to Numeric
+## Change post_date from Char to Date
+## !! Not Clean Yet !!
+
+IG_Telco_posts_wip$post_date <-
+  mdy(IG_Telco_posts_wip$post_date)
+
+# Clean Unnecessary Texts from Columns 
+IG_Telco_posts_clean <- IG_Telco_posts_wip %>%
+  mutate(brand = str_extract(brand, "Optus|Telstra|Vodafone AU|amaysim")) %>% 
+  rename("numbers" = "Numbers",
+         "interactions" = "States")
+```
+## !! Clean !!
+
+
+#IG Comments Cleaning
+## !! Clean !!
+```{r}
+
+IG_Telco_comments$comment_date_actual <- 
+  gsub(",", "", IG_Telco_comments$comment_date_actual)
+IG_Telco_comments$comment_date_actual <- 
+  gsub(" ", "/", IG_Telco_comments$comment_date_actual)
+
+IG_Telco_comments$likes <- gsub("Reply", "0", IG_Telco_comments$likes)
+IG_Telco_comments$likes <- gsub("\\D", "", IG_Telco_comments$likes)
+
+IG_Telco_comments$comment_date_actual <-
+  mdy(IG_Telco_comments$comment_date_actual)
+
+IG_Telco_comments_clean <- IG_Telco_comments %>%
+  select(commenter_username, comment_content,
+         comment_date_actual, likes, post_url) %>%
+  rename("Username" = "commenter_username",
+         "Content" = "comment_content",
+         "Date" = "comment_date_actual",
+         "Likes_number" = "likes",
+         "Post_url" = "post_url") %>%
+  filter(!is.na(Date)) %>% 
+  rename("username" = "Username",
+         "content" = "Content",
+         "date" = "Date",
+         "likes_number" = "Likes_number",
+         "post_url" = "Post_url")
+
+```
+## !! Clean !!
+
+
+
+# Clean FB_post
+## Clean!!
+```{r}
+FB_Telco_posts_wip <- FB_Telco_posts %>% 
+  select(-c("brand", "fb_handle")) %>% 
+  rename("brand" = "username",
+         "video_views" = "views")
+
+# Clean Unneccessary Texts from Columns 
+clean_comment <- gsub("^(\\d+)\\s*comment[s]*$", "\\1", FB_Telco_posts$comments) %>% 
+  as.numeric() %>% 
+  as.tibble()
+
+clean_share <- gsub("^(\\d+)\\s*share[s]*$", "\\1", FB_Telco_posts$shares) %>% 
+  as.numeric() %>% 
+  as.tibble()
+
+clean_vidview <- gsub("^(\\d+)\\s*view[s]*$", "\\1", FB_Telco_posts$views) %>% 
+  as.numeric() %>% 
+  as.tibble()
+  
+clean_reaction <- gsub("K", "e3", FB_Telco_posts$reactions) %>% 
+  as.numeric() %>% 
+  as.tibble()
+
+clean_postdatetime <- sub("\\s*Name:.*", "", FB_Telco_posts$post_date_time) %>% 
+  as.tibble()
+clean_postdatetime$value <- gsub("^\\d+\\s+", "", clean_postdatetime$value)
+
+# Set Dates and Times format
+clean_postdatetime <- separate(clean_postdatetime, value, into = c("Date", "Time"), sep = " ")
+clean_postdatetime$Date <- as.Date(clean_postdatetime$Date, format = "%d/%m/%Y")
+clean_postdatetime$Time <- as.POSIXct(clean_postdatetime$Time, format = "%H:%M")
+clean_postdatetime$Time <- format(clean_postdatetime$Time, format = "%H:%M")
+# Classified excessive specificity of minutes time into quarterly format
+clean_postdatetime$Time <- paste0(substr(clean_postdatetime$Time, 1, 2), ":",
+                                  ifelse(substr(clean_postdatetime$Time, 4, 5) < 15, "00",
+                                         ifelse(substr(clean_postdatetime$Time, 4, 5) < 30, "15",
+                                                ifelse(substr(clean_postdatetime$Time, 4, 5) < 45, "30", "45"))))
+
+# Adding back clean columns
+FB_Telco_posts_wip$comments <- clean_comment$value %>% 
+  replace_na(0)
+FB_Telco_posts_wip$shares <- clean_share$value %>% 
+  replace_na(0)
+FB_Telco_posts_wip$video_views <- clean_vidview$value %>% 
+  replace_na(0)
+FB_Telco_posts_wip$reactions <- clean_reaction$value %>% 
+  replace_na(0)
+FB_Telco_posts_wip$post_date_time <- clean_postdatetime$Date
+FB_Telco_posts_wip$post_time <- clean_postdatetime$Time
+  
+# Change Date column name
+FB_Telco_posts_wip <- FB_Telco_posts_wip %>% 
+  rename("post_date" = "post_date_time")
+
+# Clean rows with reel not found data
+FB_Telco_posts_wip <- FB_Telco_posts_wip %>% 
+  filter(!grepl("reel post - username not found", brand))
+
+# Change df to confirmed clean df
+FB_Telco_posts_clean <- FB_Telco_posts_wip
+
+```
+## !! Clean !!
+
+
+# Clean FB_comment
+## !! Clean !!
+```{r}
+# Assuming html_strings is a vector of HTML strings
+comment_text <- character(length(FB_Telco_comments$comment_content))  # Create an empty vector to store extracted text
+
+for (i in seq_along(FB_Telco_comments$comment_content)) {
+  # Use regular expressions to extract the comment content
+  comment_text[i] <- gsub("<[^>]+>", "", FB_Telco_comments$comment_content[i])  # Remove HTML tags
+  comment_text[i] <- gsub("\\s+", " ", comment_text[i])  # Remove extra spaces
+}
+
+# Convert the result to a tibble if needed
+comment_tibble <- as_tibble(comment_text)
+
+FB_Telco_comments_wip <- FB_Telco_comments
+
+FB_Telco_comments_wip$comment_content <- comment_tibble$value
+
+FB_Telco_comments_wip$comment_date <-
+  add_with_rollback(as.POSIXct("2023-08-15 13:12:00 AEST"),
+                    -as.period(sub("\\s", "",
+                    FB_Telco_comments_wip$comment_date)))
+
+FB_Telco_comments_wip <- FB_Telco_comments_wip %>%
+  mutate(Date = as.Date(comment_date, format = "%m%d%Y"),
+         Hour = str_sub(comment_date, 12, 13)) %>% 
+  rename("post_date" = "Date",
+         "post_time_hr" = "Hour") %>% 
+  select(-c("comment_date"))
+
+## !! Not Clean Yet !!
+
+# Change df to confirmed clean df
+FB_Telco_comments_clean <- FB_Telco_comments_wip
+```
+## !! Clean !!
+
+
+```{r}
+
+write.csv(IG_Telco_comments_clean,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/IG_Telco_comments.csv', row.names=FALSE)
+
+write.csv(IG_Telco_posts_clean,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/IG_Telco_posts.csv', row.names=FALSE)
+
+write.csv(FB_Telco_posts_clean,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/FB_Telco_posts.csv', row.names=FALSE)
+
+write.csv(FB_Telco_comments_clean,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/FB_Telco_comments.csv', row.names=FALSE)
+
+```
+
+

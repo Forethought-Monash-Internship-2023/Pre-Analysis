@@ -1,0 +1,593 @@
+Brand,FB Handle,Username,Post Caption,Post date time,Reactions,Comments,Shares,Post url,Views (blank for non video posts)
+"0    APT
+Name: brand, dtype: object","0    APTouring
+Name: fb_handle, dtype: object",APT,"The perfect way to get to know a new destination is through its cuisine. On a visit to Japan, plenty of local delicacies spring to mind but at the top of your list should be mount-watering Okonmiyaki. ","0    30/07/2023 20:05
+Name: post_date_time, dtype: object",3,No comments,No shares,https://facebook.com/APTouring/posts/309119444809524,
+"1    APT
+Name: brand, dtype: object","1    APTouring
+Name: fb_handle, dtype: object",APT,Postcards from Canada!,"1    28/07/2023 19:50
+Name: post_date_time, dtype: object",52,15 comments,No shares,https://facebook.com/APTouring/posts/308125654908903,
+"2    APT
+Name: brand, dtype: object","2    APTouring
+Name: fb_handle, dtype: object",APT,"The enchanting world of ice and water awaits.  Each day experience the beauty and excitement of the great White Continent. Where jaw-dropping, once-in-a-lifetime moments are daily occurrences. ","2    26/07/2023 19:00
+Name: post_date_time, dtype: object",22,No comments,2 shares,https://facebook.com/APTouring/posts/307155171672618,
+"3    APT
+Name: brand, dtype: object","3    APTouring
+Name: fb_handle, dtype: object",APT,Why spend another winter in Australia when you could be cruising the Douro?,"3    24/07/2023 20:00
+Name: post_date_time, dtype: object",19,1 comment,2 shares,https://facebook.com/APTouring/posts/306252225096246,
+"4    APT
+Name: brand, dtype: object","4    APTouring
+Name: fb_handle, dtype: object",APT,A brand new Signature Experience in Montreal for 2024!,"4    23/07/2023 18:00
+Name: post_date_time, dtype: object",544,5 comments,20 shares,https://facebook.com/APTouring/posts/305739308480871,
+"5    APT
+Name: brand, dtype: object","5    APTouring
+Name: fb_handle, dtype: object",APT,The gateway to South Australia's Outback. ,"5    22/07/2023 18:50
+Name: post_date_time, dtype: object",28,2 comments,2 shares,https://facebook.com/APTouring/posts/305286185192850,
+"6    APT
+Name: brand, dtype: object","6    APTouring
+Name: fb_handle, dtype: object",APT,"Postcards from Miltenberg. Thank you for sharing, Deborah.","6    21/07/2023 18:00
+Name: post_date_time, dtype: object",48,12 comments,2 shares,https://facebook.com/APTouring/posts/304774385244030,
+"7    APT
+Name: brand, dtype: object","7    APTouring
+Name: fb_handle, dtype: object",APT,"Live the quintessential Italian life, delight in an afternoon of fresh antipasti, locally made olive oils and regional wines in the beautiful town of San Gimignano. ","7    20/07/2023 20:50
+Name: post_date_time, dtype: object",35,4 comments,No shares,https://facebook.com/APTouring/posts/304342735287195,
+"8    APT
+Name: brand, dtype: object","8    APTouring
+Name: fb_handle, dtype: object",APT,Equal in beauty and historical significance Prague's Old Town Square is the heart of this lively city. ,"8    19/07/2023 19:40
+Name: post_date_time, dtype: object",1.4K,34 comments,25 shares,https://facebook.com/APTouring/posts/303810662007069,
+"9    APT
+Name: brand, dtype: object","9    APTouring
+Name: fb_handle, dtype: object",APT,A sparkling jewel awaits below the island of Bisevo in Croatia.,"9    18/07/2023 18:45
+Name: post_date_time, dtype: object",14,5 comments,No shares,https://facebook.com/APTouring/posts/303297612058374,
+"10    APT
+Name: brand, dtype: object","10    APTouring
+Name: fb_handle, dtype: object",APT,"Iconic cities steeped in history, quaint riverside towns and dazzling coastlines - there's no end to the delights of Europe. There's an unforgettable discovery for every traveller with APT. ","10    17/07/2023 18:25
+Name: post_date_time, dtype: object",38,No comments,3 shares,https://facebook.com/APTouring/posts/302787028776099,
+"11    APT
+Name: brand, dtype: object","11    APTouring
+Name: fb_handle, dtype: object",APT,"Ancient rocks, refreshing swimming holes and showering waterfalls make up the beautiful Karijini National Park. ","11    15/07/2023 18:25
+Name: post_date_time, dtype: object",27,2 comments,4 shares,https://facebook.com/APTouring/posts/301743095547159,
+"12    APT
+Name: brand, dtype: object","12    APTouring
+Name: fb_handle, dtype: object",APT,"From luxurious hotels to memorable stays in the wilderness, we are committed to ensuring every day of touring ends in comfort, no matter how remote your travels take you.","12    14/07/2023 20:25
+Name: post_date_time, dtype: object",47,1 comment,No shares,https://facebook.com/APTouring/posts/301284925592976,
+"13    APT
+Name: brand, dtype: object","13    APTouring
+Name: fb_handle, dtype: object",APT,"Robyn P, a guest on our 19-day Rockies Explorer and Alaska Cruise, shares her thoughts after returning from her trip.","13    13/07/2023 19:00
+Name: post_date_time, dtype: object",26,No comments,2 shares,https://facebook.com/APTouring/posts/300761102312025,
+"14    APT
+Name: brand, dtype: object","14    APTouring
+Name: fb_handle, dtype: object",APT,Standing proud on the banks of the Nile River are echoes of an ancient civilisation.,"14    11/07/2023 21:00
+Name: post_date_time, dtype: object",867,18 comments,15 shares,https://facebook.com/APTouring/posts/299832095738259,
+"15    APT
+Name: brand, dtype: object","15    APTouring
+Name: fb_handle, dtype: object",APT,"Immerse yourself in nature's wonders as you cruise along the mighty Ord River in the Kimberley, witnessing the captivating ecological marvels born from its dual damming. ","15    10/07/2023 19:00
+Name: post_date_time, dtype: object",46,4 comments,4 shares,https://facebook.com/APTouring/posts/299287322459403,
+"16    APT
+Name: brand, dtype: object","16    APTouring
+Name: fb_handle, dtype: object",APT,"Milford Sound, known as Piopiotahi in the Māori dialect, has been attracting visitors for thousands of years.","16    8/07/2023 20:00
+Name: post_date_time, dtype: object",35,6 comments,No shares,https://facebook.com/APTouring/posts/298175835903885,
+"17    APT
+Name: brand, dtype: object","17    APTouring
+Name: fb_handle, dtype: object",APT,See for yourself why the beautiful Rhine River has inspired writers and artists for centuries on our Magnificent Europe Cruise. ,"17    7/07/2023 19:00
+Name: post_date_time, dtype: object",49,17 comments,No shares,https://facebook.com/APTouring/posts/297564232631712,
+"18    APT
+Name: brand, dtype: object","18    APTouring
+Name: fb_handle, dtype: object",APT,Introducing Africa! ,"18    5/07/2023 20:01
+Name: post_date_time, dtype: object",33,7 comments,4 shares,https://facebook.com/APTouring/posts/296421022746033,
+"19    APT
+Name: brand, dtype: object","19    APTouring
+Name: fb_handle, dtype: object",APT,"Just 1 day to go until we reveal our new tours, but can you guess the destination?","19    4/07/2023 19:00
+Name: post_date_time, dtype: object",35,16 comments,No shares,https://facebook.com/APTouring/posts/295798746141594,
+"20    APT
+Name: brand, dtype: object","20    APTouring
+Name: fb_handle, dtype: object",APT,Can you guess which continent APT are travelling to next?,"20    3/07/2023 19:00
+Name: post_date_time, dtype: object",12,2 comments,No shares,https://facebook.com/APTouring/posts/295196792868456,
+"21    APT
+Name: brand, dtype: object","21    APTouring
+Name: fb_handle, dtype: object",APT,3 days to go! We have a very exciting destination going live in just 3 days. Can you guess the destination?,"21    2/07/2023 18:00
+Name: post_date_time, dtype: object",28,6 comments,No shares,https://facebook.com/APTouring/posts/294603742927761,
+"22    APT
+Name: brand, dtype: object","22    APTouring
+Name: fb_handle, dtype: object",APT,"With a French heart and a distinctive Canadian charm, Montreal is the perfect destination for art and history lovers to explore.","22    1/07/2023 19:00
+Name: post_date_time, dtype: object",19,4 comments,No shares,https://facebook.com/APTouring/posts/294031062985029,
+"23    APT
+Name: brand, dtype: object","23    APTouring
+Name: fb_handle, dtype: object",APT,"Iceland promises sparkling glaciers, icefields stretching for miles, powerful waterfalls and impressive landscapes dotted with impressive geological wonders.  ","23    30/06/2023 20:00
+Name: post_date_time, dtype: object",10,1 comment,No shares,https://facebook.com/APTouring/posts/293496416371827,
+"24    APT
+Name: brand, dtype: object","24    APTouring
+Name: fb_handle, dtype: object",APT,"Canada in springtime is beautiful, but in winter, it transforms into a wonderland of snow-capped mountains,  glistening ice lakes and crisp air. ","24    29/06/2023 18:00
+Name: post_date_time, dtype: object",1.3K,53 comments,35 shares,https://facebook.com/APTouring/posts/292944599760342,
+"25    APT
+Name: brand, dtype: object","25    APTouring
+Name: fb_handle, dtype: object",APT,"This week's #UnmissableLandmark is Zurich Main Station, specifically at Christmas time when it's transformed into Europe's largest indoor festive market.","25    28/06/2023 20:00
+Name: post_date_time, dtype: object",13,1 comment,No shares,https://facebook.com/APTouring/posts/292388246482644,
+"26    APT
+Name: brand, dtype: object","26    APTouring
+Name: fb_handle, dtype: object",APT,"A cruise to Alaska is thrilling, enriching and eye-opening all at once. ","26    26/06/2023 19:00
+Name: post_date_time, dtype: object",34,5 comments,3 shares,https://facebook.com/APTouring/posts/291261369928665,
+"27    APT
+Name: brand, dtype: object","27    APTouring
+Name: fb_handle, dtype: object",APT,"Winter in Europe is divine, especially when you're on holiday.","27    25/06/2023 21:00
+Name: post_date_time, dtype: object",21,No comments,7 shares,https://facebook.com/APTouring/posts/290787203309415,
+"28    APT
+Name: brand, dtype: object","28    APTouring
+Name: fb_handle, dtype: object",APT,It's time to discover the vast brilliance of Antarctica on board a floating oasis of pure luxury. ,"28    24/06/2023 18:00
+Name: post_date_time, dtype: object",18,No comments,No shares,https://facebook.com/APTouring/posts/290201940034608,
+"29    APT
+Name: brand, dtype: object","29    APTouring
+Name: fb_handle, dtype: object",APT,Wachau Valley. ,"29    22/06/2023 18:00
+Name: post_date_time, dtype: object",902,45 comments,18 shares,https://facebook.com/APTouring/posts/289209296800539,
+"30    APT
+Name: brand, dtype: object","30    APTouring
+Name: fb_handle, dtype: object",APT,What says Barcelona more than Gaudí?,"30    20/06/2023 20:00
+Name: post_date_time, dtype: object",12,No comments,No shares,https://facebook.com/APTouring/posts/288272393560896,
+"31    APT
+Name: brand, dtype: object","31    APTouring
+Name: fb_handle, dtype: object",APT,"Have you heard of APT's charitable fund OneTomorrow?APT's co-owner and Director Rob McGeary shares our mission, the charities we work closely with and what you can do to help. https://www.onetomorrow.com.au/…","31    19/06/2023 18:01
+Name: post_date_time, dtype: object",7,No comments,No shares,https://facebook.com/APTouring/posts/287764576945011,264 views
+"32    APT
+Name: brand, dtype: object","32    APTouring
+Name: fb_handle, dtype: object",APT,"Reaching a maximum speed of 330 km/h, the KTX fast train will take you from Seoul to Jeonju, a city famous for its food scene.","32    18/06/2023 18:00
+Name: post_date_time, dtype: object",119,5 comments,4 shares,https://facebook.com/APTouring/posts/287246176996851,
+"33    APT
+Name: brand, dtype: object","33    APTouring
+Name: fb_handle, dtype: object",APT,Prepare to step back in time in the long-awaited Grand Egyptian Museum. This highly anticipated marvel is set to become the world's largest archaeological museum upon its grand opening later this year.,"33    16/06/2023 20:00
+Name: post_date_time, dtype: object",20,1 comment,No shares,https://facebook.com/APTouring/posts/286252340429568,
+"34    APT
+Name: brand, dtype: object","34    APTouring
+Name: fb_handle, dtype: object",APT,Embark on an unforgettable journey aboard the Rocky Mountaineer in Canada's breathtaking landscapes. ,"34    15/06/2023 20:00
+Name: post_date_time, dtype: object",41,10 comments,No shares,https://facebook.com/APTouring/posts/285640503824085,
+"35    APT
+Name: brand, dtype: object","35    APTouring
+Name: fb_handle, dtype: object",APT,A spectacular journey awaits onboard your Holland America Line cruise from Vancouver to Anchorage. ,"35    14/06/2023 21:00
+Name: post_date_time, dtype: object",44,16 comments,3 shares,https://facebook.com/APTouring/posts/285052257216243,
+"36    APT
+Name: brand, dtype: object","36    APTouring
+Name: fb_handle, dtype: object",APT,Are you ready to journey the Wild West?  Embark on an incredible adventure to explore America's western states in style with a unique land and rail journey!,"36    13/06/2023 20:00
+Name: post_date_time, dtype: object",18,3 comments,No shares,https://facebook.com/APTouring/posts/284497293938406,
+"37    APT
+Name: brand, dtype: object","37    APTouring
+Name: fb_handle, dtype: object",APT,Our tour guides are having a fabulous time showing our guests some of the most incredible places in the Kimberley. ,"37    12/06/2023 19:00
+Name: post_date_time, dtype: object",48,12 comments,No shares,https://facebook.com/APTouring/posts/283886963999439,
+"38    APT
+Name: brand, dtype: object","38    APTouring
+Name: fb_handle, dtype: object",APT,A world of travel awaits. ,"38    11/06/2023 18:00
+Name: post_date_time, dtype: object",11,No comments,No shares,https://facebook.com/APTouring/posts/283276217393847,
+"39    APT
+Name: brand, dtype: object","39    APTouring
+Name: fb_handle, dtype: object",APT,Canada and Alaska's spectacular landscapes and scenery will play in your mind forever. ,"39    9/06/2023 18:02
+Name: post_date_time, dtype: object",20,2 comments,No shares,https://facebook.com/APTouring/posts/282066974181438,
+"40    APT
+Name: brand, dtype: object","40    APTouring
+Name: fb_handle, dtype: object",APT,"A firm favourite of APT co-owner Rob McGeary, Cygnet Bay is one of Western Australia's most remarkable Outback retreats.","40    8/06/2023 20:00
+Name: post_date_time, dtype: object",31,6 comments,2 shares,https://facebook.com/APTouring/posts/281503167571152,
+"41    APT
+Name: brand, dtype: object","41    APTouring
+Name: fb_handle, dtype: object",APT,Explore Outback Australia in 2023. Discover the secrets of Outback Australia's ancient and sacred land. ,"41    7/06/2023 18:01
+Name: post_date_time, dtype: object",13,No comments,No shares,https://facebook.com/APTouring/posts/280866270968175,
+"42    APT
+Name: brand, dtype: object","42    APTouring
+Name: fb_handle, dtype: object",APT,"With steep cliffs rising from the turquoise Tyrrhenian Sea, the Amalfi Coast is one of the most scenic stretches of coastline in Italy. The brightly coloured buildings dotted across the cliffs are the perfect backdrop for an afternoon of exploration.","42    6/06/2023 19:00
+Name: post_date_time, dtype: object",15,No comments,No shares,https://facebook.com/APTouring/posts/280314457690023,
+"43    APT
+Name: brand, dtype: object","43    APTouring
+Name: fb_handle, dtype: object",APT,"Discover the rich cultures, tantalising flavours and mesmerising countryside of Cambodia and Vietnam while cruising along the tranquil waters of the magical Mekong River on our brand-new luxury ship, the Mekong Serenity.","43    5/06/2023 21:00
+Name: post_date_time, dtype: object",8,No comments,No shares,https://facebook.com/APTouring/posts/279844097737059,
+"44    APT
+Name: brand, dtype: object","44    APTouring
+Name: fb_handle, dtype: object",APT,"The warm sand, beaming sunshine and the salty ocean air, the perfect cocktail for your next holiday escape.  Which beach will you be visiting next?Discover APT.https://www.aptouring.com.au/…","44    4/06/2023 20:01
+Name: post_date_time, dtype: object",11,No comments,No shares,https://facebook.com/APTouring/posts/279258241128978,365 views
+"45    APT
+Name: brand, dtype: object","45    APTouring
+Name: fb_handle, dtype: object",APT,"Regularly voted as one of the best beaches in the world, its not hard to understand why as you take your first step onto the warm white sand of Turqousie Bay. ","45    2/06/2023 19:00
+Name: post_date_time, dtype: object",29,1 comment,No shares,https://facebook.com/APTouring/posts/278172931237509,
+"46    APT
+Name: brand, dtype: object","46    APTouring
+Name: fb_handle, dtype: object",APT,"APT's co-owner Rob, shares his top Kimberley travel experiences, including a visit to Cape Leveque and APT Kimberley Wilderness Lodge stays.","46    31/05/2023 19:00
+Name: post_date_time, dtype: object",15,No comments,No shares,https://facebook.com/APTouring/posts/277062028015266,
+"47    APT
+Name: brand, dtype: object","47    APTouring
+Name: fb_handle, dtype: object",APT,"The island town of Tigre is just north of Buenos Aires and is home to one of the world's largest deltas, Parana Delta. Ride on a traditional boat through the many canals and rivers that snake through the wildlife rich wetlands and catch a glimpse of the river culture. ","47    30/05/2023 19:00
+Name: post_date_time, dtype: object",18,No comments,No shares,https://facebook.com/APTouring/posts/276508054737330,
+"48    APT
+Name: brand, dtype: object","48    APTouring
+Name: fb_handle, dtype: object",APT,"An experience like no other, a helicopter flight over the impressive Mitchell Falls. This four-tiered natural wonder is best seen from the sky, where you can appreciate the grandeur and beauty of one of the most spectacular waterfalls in Australia.","48    29/05/2023 20:00
+Name: post_date_time, dtype: object",892,37 comments,40 shares,https://facebook.com/APTouring/posts/276023811452421,
+"49    APT
+Name: brand, dtype: object","49    APTouring
+Name: fb_handle, dtype: object",APT,Visit the Galapagos Islands by yacht and venture to visit the stunning and otherworldly Bartolome Island. Discover fascinating marine and land birds and explore the bay’s volcanic geology.,"49    28/05/2023 20:00
+Name: post_date_time, dtype: object",19,No comments,2 shares,https://facebook.com/APTouring/posts/275488551505947,
+"50    APT
+Name: brand, dtype: object","50    APTouring
+Name: fb_handle, dtype: object",APT,"Take in the tranquil surrounds of the Gordon River whilst onboard the luxurious Spirit of the Wild. You'll be taken on a journey to historical and remarkable landmarks including Macquarie Harbour, Hells Gates, Heritage Landing and Sarah Island. ","50    27/05/2023 19:00
+Name: post_date_time, dtype: object",20,2 comments,No shares,https://facebook.com/APTouring/posts/274877781567024,
+"51    APT
+Name: brand, dtype: object","51    APTouring
+Name: fb_handle, dtype: object",APT,"Commanding panoramic views over the Jeker Valley, Château Neercanne has a rich culture and culinary tradition that will have the pleasure of experiencing on APT's Western Front Explorer river cruise. ","51    26/05/2023 20:00
+Name: post_date_time, dtype: object",17,5 comments,No shares,https://facebook.com/APTouring/posts/274300178291451,
+"52    APT
+Name: brand, dtype: object","52    APTouring
+Name: fb_handle, dtype: object",APT,"Take a seat on the top deck of the Longreach Explorer and get ready to take in the 360-degree sweeping ricer and floodplain views. Listen out for the captain as they share stories of the river, its wildlife and indigenous heritage all whilst watching the sunset in the distance.  Graham Werner Photography","52    25/05/2023 19:00
+Name: post_date_time, dtype: object",16,3 comments,2 shares,https://facebook.com/APTouring/posts/273746848346784,
+"53    APT
+Name: brand, dtype: object","53    APTouring
+Name: fb_handle, dtype: object",APT,"Your destination is the heavenly Cloudy Bay Winery in the Marlborough wine region on New Zealand's South Island. Your day will be spent indulging on local produce and sipping on Cloudy Bay wines whilst sitting in the sunshine that beams through the  stunning, architecturally designed Treehouse building.","53    24/05/2023 19:00
+Name: post_date_time, dtype: object",18,No comments,2 shares,https://facebook.com/APTouring/posts/273215475066588,
+"54    APT
+Name: brand, dtype: object","54    APTouring
+Name: fb_handle, dtype: object",APT,"Canada and Alaska offers its guests the best of both worlds, with plenty of relaxation and adventure on every journey. Whether you're riding the Rocky Mountaineer, joining a Blue River Safari or watching the world go by from the comfort of your hotel room looking over Lake Louise. ","54    23/05/2023 19:46
+Name: post_date_time, dtype: object",24,11 comments,2 shares,https://facebook.com/APTouring/posts/272724835115652,
+"55    APT
+Name: brand, dtype: object","55    APTouring
+Name: fb_handle, dtype: object",APT,"As far as adventures go, stepping foot on the Antarctic peninsula is an incomparable experience.On your Antarctic adventure explore ice-dotted bays by zodiac, cruise the gateway to Antarctica - Drake's passage and witness the incredible wildlife that call this continent home. ","55    22/05/2023 18:00
+Name: post_date_time, dtype: object",28,4 comments,2 shares,https://facebook.com/APTouring/posts/272192701835532,
+"56    APT
+Name: brand, dtype: object","56    APTouring
+Name: fb_handle, dtype: object",APT,"Get a taste for adventure as you make your way across the Cambodian countryside on a quadbike. Traverse past rice fields, through small villages and witness the beauty of Cambodia from a whole new perspective.","56    21/05/2023 18:00
+Name: post_date_time, dtype: object",20,4 comments,No shares,https://facebook.com/APTouring/posts/271611458560323,
+"57    APT
+Name: brand, dtype: object","57    APTouring
+Name: fb_handle, dtype: object",APT,"The home of luxury merino wool, Anlaby Station and it's enviable gardens and homestead are a beloved stop on APT's South Australia Flinders Ranges and Wineries tour.","57    19/05/2023 19:00
+Name: post_date_time, dtype: object",10,No comments,No shares,https://facebook.com/APTouring/posts/270384728682996,
+"58    APT
+Name: brand, dtype: object","58    APTouring
+Name: fb_handle, dtype: object",APT,Make the most of your freedom of choice options on a European River cruise and take a guided bike ride to the incredible Walhalla memorial.,"58    18/05/2023 20:00
+Name: post_date_time, dtype: object",15,1 comment,No shares,https://facebook.com/APTouring/posts/269784465409689,
+"59    APT
+Name: brand, dtype: object","59    APTouring
+Name: fb_handle, dtype: object",APT,Seeing Khati-Thanda Lake Eyre from above is simply magical but getting close to Australia's largest salt lake by walking over the dazzling salt flats will give you a whole new perspective. ,"59    17/05/2023 19:00
+Name: post_date_time, dtype: object",10,2 comments,No shares,https://facebook.com/APTouring/posts/269258398795629,
+"60    APT
+Name: brand, dtype: object","60    APTouring
+Name: fb_handle, dtype: object",APT,"Rediscover the natural purity of New Zealand on an APT Private Air Tour. Covering the majestic landscapes, cities, and alluring attractions of the North and South Islands.","60    16/05/2023 19:03
+Name: post_date_time, dtype: object",12,No comments,No shares,https://facebook.com/APTouring/posts/268743925513743,
+"61    APT
+Name: brand, dtype: object","61    APTouring
+Name: fb_handle, dtype: object",APT,"Like many European cities, Edinburgh is best explored by foot. Wander down the topsy-turvy alley ways, sample whiskey on the Royal Mile and explore the mighty castle , which offers magical views across the city.","61    15/05/2023 20:00
+Name: post_date_time, dtype: object",739,27 comments,13 shares,https://facebook.com/APTouring/posts/268268752227927,
+"62    APT
+Name: brand, dtype: object","62    APTouring
+Name: fb_handle, dtype: object",APT,Found amongst Australia's gorgeous Kimberley region is this beautiful natural amphitheatre. ,"62    14/05/2023 19:00
+Name: post_date_time, dtype: object",51,23 comments,No shares,https://facebook.com/APTouring/posts/267631658958303,
+"63    APT
+Name: brand, dtype: object","63    APTouring
+Name: fb_handle, dtype: object",APT,A #SignatureExperience through New Zealand's spectacular South Island High country. Get ready to witness awe-inspiring mountain top views. ,"63    12/05/2023 19:00
+Name: post_date_time, dtype: object",23,No comments,3 shares,https://facebook.com/APTouring/posts/266500052404797,
+"64    APT
+Name: brand, dtype: object","64    APTouring
+Name: fb_handle, dtype: object",APT,The Great Sphinx of Giza ,"64    11/05/2023 20:45
+Name: post_date_time, dtype: object",24,No comments,No shares,https://facebook.com/APTouring/posts/266023872452415,
+"65    APT
+Name: brand, dtype: object","65    APTouring
+Name: fb_handle, dtype: object",APT,"From the music to the food Spain's capital, Madrid comes to life after dark.","65    10/05/2023 20:40
+Name: post_date_time, dtype: object",9,No comments,No shares,https://facebook.com/APTouring/posts/265506849170784,
+"66    APT
+Name: brand, dtype: object","66    APTouring
+Name: fb_handle, dtype: object",APT,"After a day of exploration in the Kimberley wind down by the fire, toast marshmallows, tell stories and gaze up at the stars that light up the night sky. ","66    9/05/2023 19:20
+Name: post_date_time, dtype: object",464,20 comments,12 shares,https://facebook.com/APTouring/posts/264966729224796,
+"67    APT
+Name: brand, dtype: object","67    APTouring
+Name: fb_handle, dtype: object",APT,"Imagine yourself here... sat on the deck of a luxury yacht sipping your cocktail watching the afternoon sun fade away off the coast of Korcula, Croatia.","67    8/05/2023 19:10
+Name: post_date_time, dtype: object",82,22 comments,2 shares,https://facebook.com/APTouring/posts/264349059286563,
+"68    APT
+Name: brand, dtype: object","68    APTouring
+Name: fb_handle, dtype: object",APT,"Where in the world is this?Once a simple two-lane road that ran through the desert, and now an iconic display of bright lights. ","68    7/05/2023 18:35
+Name: post_date_time, dtype: object",13,9 comments,No shares,https://facebook.com/APTouring/posts/263800809341388,
+"69    APT
+Name: brand, dtype: object","69    APTouring
+Name: fb_handle, dtype: object",APT,"If your stay at Belmond Hotel das Cataratas wasn't already spectacular enough, the #signatureexperience that awaits will make your stay that extra special. ","69    5/05/2023 19:30
+Name: post_date_time, dtype: object",17,No comments,No shares,https://facebook.com/APTouring/posts/262659796122156,
+"70    APT
+Name: brand, dtype: object","70    APTouring
+Name: fb_handle, dtype: object",APT,The early bird catches the beautiful sunrises. ,"70    3/05/2023 20:05
+Name: post_date_time, dtype: object",28,7 comments,No shares,https://facebook.com/APTouring/posts/261515509569918,
+"71    APT
+Name: brand, dtype: object","71    APTouring
+Name: fb_handle, dtype: object",APT,The perfect end to a day of exploration in Western Australia's Kimberley. ,"71    1/05/2023 19:35
+Name: post_date_time, dtype: object",964,27 comments,19 shares,https://facebook.com/APTouring/posts/260424356345700,
+"72    APT
+Name: brand, dtype: object","72    APTouring
+Name: fb_handle, dtype: object",APT,APT Guest Janelle has shared with us some memories from her 2019 European river cruise.,"72    30/04/2023 20:33
+Name: post_date_time, dtype: object",116,53 comments,No shares,https://facebook.com/APTouring/posts/259848176403318,
+"73    APT
+Name: brand, dtype: object","73    APTouring
+Name: fb_handle, dtype: object",APT,"Explore how Japan's culture and cuisine pay homage to its traditions while embracing the new and the cutting-edge. Relish in gourmet rituals, authentic encounters and historic landmarks including immersive Naoshima, commonly known as Art Island.","73    29/04/2023 20:00
+Name: post_date_time, dtype: object",7,No comments,No shares,https://facebook.com/APTouring/posts/259265053128297,
+"74    APT
+Name: brand, dtype: object","74    APTouring
+Name: fb_handle, dtype: object",APT,This APT #signatureexperience will have you reaching for your camera from start to finish.,"74    28/04/2023 20:00
+Name: post_date_time, dtype: object",17,No comments,No shares,https://facebook.com/APTouring/posts/258733566514779,
+"75    APT
+Name: brand, dtype: object","75    APTouring
+Name: fb_handle, dtype: object",APT,"Dining at Michelin star restaurant Balwoo Gongyang, Seoul, will likely be one of the most remarkable meals of your life. Managed by a Buddhist nun from the Choe Gae Sa Temple across the street, the entire menu is refined temple food, meaning all the dishes are vegan and each ingredient has been specially selected to  enhance spirituality.  ","75    27/04/2023 20:00
+Name: post_date_time, dtype: object",10,1 comment,No shares,https://facebook.com/APTouring/posts/258200733234729,
+"76    APT
+Name: brand, dtype: object","76    APTouring
+Name: fb_handle, dtype: object",APT,"The perfect combination of cheese and corn. The inticing smell of Choclo con Queso - a perfectly cooked corn cobb, topped with butter and a delightfully salty and creamy soft cheese  fills the streets of Peru. This popular street food celebrates the regions spectacular corn varieties. ","76    26/04/2023 19:00
+Name: post_date_time, dtype: object",9,No comments,3 shares,https://facebook.com/APTouring/posts/257667903288012,
+"77    APT
+Name: brand, dtype: object","77    APTouring
+Name: fb_handle, dtype: object",APT,"When it comes to Seafood, fresh is best! And it doesn't get much fresher than walking into Coffin Bay to harvest, shuck and eat oysters straight from the ocean. ","77    25/04/2023 20:01
+Name: post_date_time, dtype: object",20,No comments,No shares,https://facebook.com/APTouring/posts/257180496670086,
+"78    APT
+Name: brand, dtype: object","78    APTouring
+Name: fb_handle, dtype: object",APT,Would you like to enjoy a taste of traditional food with modern flare whilst cosy inside your own private Tee Pee?A delightful 3-course meal followed by an evening of watching the northern lights shimmer in the night-sky is instore when visiting Yellowknife with APT. ,"78    24/04/2023 21:00
+Name: post_date_time, dtype: object",29,2 comments,No shares,https://facebook.com/APTouring/posts/256693436718792,
+"79    APT
+Name: brand, dtype: object","79    APTouring
+Name: fb_handle, dtype: object",APT,"As if access to the incredible Schönbrunn Palace, Vienna is not exciting enough, with APT you also be invited to the Imperial Kitchen for a master class in baking Apple Strudel.  ","79    23/04/2023 18:00
+Name: post_date_time, dtype: object",47,5 comments,No shares,https://facebook.com/APTouring/posts/256116390109830,
+"80    APT
+Name: brand, dtype: object","80    APTouring
+Name: fb_handle, dtype: object",APT,"A fine-dining four-course meal, a beautifully refurbished 1927 Melbourne Tram and the changing scenery of Christchruch, New Zealand. This unique dining experience is a memorable evening of sightseeing whilst enjoying the exquisite local flavours of New Zealand.","80    22/04/2023 20:00
+Name: post_date_time, dtype: object",393,9 comments,6 shares,https://facebook.com/APTouring/posts/255613750160094,
+"81    APT
+Name: brand, dtype: object","81    APTouring
+Name: fb_handle, dtype: object",APT,Are you a food lover? This #SignatureExperience in Tokyo is perfect for you.After a morning visiting some of the sites in Tokyo you will need a delicious lunch to fuel your afternoon of exploration. Join a local chef and try your hand preparing different types of sushi before enjoying your handmade delights for lunch. A perfect introduction to the food and culture that awaits you on the rest of your journey through Japan.#DiscoverAPT #APTLuxuryTravel #Japanhttps://www.aptouring.com.au/trips/asia/ja12,"81    21/04/2023 19:01
+Name: post_date_time, dtype: object",10,No comments,No shares,https://facebook.com/APTouring/posts/255034550218014,266 views
+"82    APT
+Name: brand, dtype: object","82    APTouring
+Name: fb_handle, dtype: object",APT,"In terms of eccentric art collections, you will struggle to find one more extensive or as exciting as The Museum of Old and New Art (Mona), Tasmania. Founded by David Walsh, this remarkable privately owned gallery is an ever changing tribute to weird and wonderful art.","82    20/04/2023 19:00
+Name: post_date_time, dtype: object",18,1 comment,No shares,https://facebook.com/APTouring/posts/254518350269634,
+"83    APT
+Name: brand, dtype: object","83    APTouring
+Name: fb_handle, dtype: object",APT,"A feast for all the senses! APT's New Zealand Private Air Tour brings you the very best of New Zealand in supreme comfort. Indulge in the best, seasonal and local produce at some of New Zealand's best wineries, explore Waiheke Island, be immersed in traditional Maori Culture and explore the highlights of remarkable New Zealand.","83    19/04/2023 20:02
+Name: post_date_time, dtype: object",12,No comments,No shares,https://facebook.com/APTouring/posts/254045110316958,
+"84    APT
+Name: brand, dtype: object","84    APTouring
+Name: fb_handle, dtype: object",APT,Where in the world is this? Today is International Day for Monuments and Sites and so what better to feature one of the places visited on our popular Magnificent Europe river cruise. ,"84    18/04/2023 18:00
+Name: post_date_time, dtype: object",35,48 comments,No shares,https://facebook.com/APTouring/posts/253515627036573,
+"85    APT
+Name: brand, dtype: object","85    APTouring
+Name: fb_handle, dtype: object",APT,There is still time to enter our Voyage Magazine giveaway!  ,"85    18/04/2023 8:35
+Name: post_date_time, dtype: object",15,33 comments,No shares,https://facebook.com/APTouring/posts/253326363722166,
+"86    APT
+Name: brand, dtype: object","86    APTouring
+Name: fb_handle, dtype: object",APT,"An undisputed treasure of Florence is the Galleria dell ’Accademia, home to the world's most acclaimed sculpture, The Statue of David.","86    17/04/2023 18:25
+Name: post_date_time, dtype: object",15,No comments,No shares,https://facebook.com/APTouring/posts/253009230420546,
+"87    APT
+Name: brand, dtype: object","87    APTouring
+Name: fb_handle, dtype: object",APT,Happy Orthodox Easter!,"87    16/04/2023 20:00
+Name: post_date_time, dtype: object",14,2 comments,No shares,https://facebook.com/APTouring/posts/252531730468296,
+"88    APT
+Name: brand, dtype: object","88    APTouring
+Name: fb_handle, dtype: object",APT,"The Festival Floats Museum in Takayama rotates it's displays three times a year to showcase the very best of the local craftmanship, with some floats dating back to the 17th century. Pay special attention for floats featuring karakuri ningyō (marionettes), which require expert puppeteers to handle the 36 strings attached to each ornate character.","88    15/04/2023 19:00
+Name: post_date_time, dtype: object",13,No comments,No shares,https://facebook.com/APTouring/posts/251986840522785,
+"89    APT
+Name: brand, dtype: object","89    APTouring
+Name: fb_handle, dtype: object",APT,Our Canadian #signatureexperience promises a special insight into the local community. ,"89    14/04/2023 20:00
+Name: post_date_time, dtype: object",475,20 comments,8 shares,https://facebook.com/APTouring/posts/251497597238376,
+"90    APT
+Name: brand, dtype: object","90    APTouring
+Name: fb_handle, dtype: object",APT,"Regular APT guest Bette Martin has travelled the world, but Antarctica holds a special place in her heart. Below, Bette shares her experience aboard our 14-day Antarctic Voyage cruise, describing the sights and experiences which will stay with her forever. ","90    13/04/2023 20:01
+Name: post_date_time, dtype: object",23,4 comments,2 shares,https://facebook.com/APTouring/posts/250981640623305,
+"91    APT
+Name: brand, dtype: object","91    APTouring
+Name: fb_handle, dtype: object",APT,Have you seen our newest edition of Voyage Magazine? Would you like your very own copy? ,"91    11/04/2023 19:00
+Name: post_date_time, dtype: object",126,27 comments,3 shares,https://facebook.com/APTouring/posts/249935967394539,
+"92    APT
+Name: brand, dtype: object","92    APTouring
+Name: fb_handle, dtype: object",APT,"Thinking about a trip to America?America’s southwestern region boasts beautiful mountain ranges, natural landmarks, incredible National Parks, and exciting cities, all waiting to be explored. Click the link below to find out our APT travel experts favourite tourist attractions when visiting the USA.","92    10/04/2023 20:00
+Name: post_date_time, dtype: object",41,3 comments,3 shares,https://facebook.com/APTouring/posts/249463270775142,
+"93    APT
+Name: brand, dtype: object","93    APTouring
+Name: fb_handle, dtype: object",APT,"In Peru, Easter Sunday celebrations go off like a rocket. Literally. ","93    9/04/2023 20:00
+Name: post_date_time, dtype: object",12,1 comment,No shares,https://facebook.com/APTouring/posts/248972474157555,
+"94    APT
+Name: brand, dtype: object","94    APTouring
+Name: fb_handle, dtype: object",APT,"The British have been perfecting their hot cross bun recipe for 900 years, but if you don't have that kind of time you can always try our recipe.","94    8/04/2023 20:00
+Name: post_date_time, dtype: object",7,No comments,No shares,https://facebook.com/APTouring/posts/248474837540652,
+"95    APT
+Name: brand, dtype: object","95    APTouring
+Name: fb_handle, dtype: object",APT,"Set sail on three days of serenity on The Au Co. Cruising Ha Long Bay is a remarkable experience for any traveller, but aboard the luxurious Au Co, gliding over the emerald waters is something magical. ","95    7/04/2023 20:00
+Name: post_date_time, dtype: object",913,22 comments,35 shares,https://facebook.com/APTouring/posts/247980857590050,
+"96    APT
+Name: brand, dtype: object","96    APTouring
+Name: fb_handle, dtype: object",APT,"Nestled between two royal palaces,  is the beautiful ancient Bukchon Hanok Village. Wander through the maze of winding alleys and admire the 600-year old architecture. ","96    6/04/2023 19:20
+Name: post_date_time, dtype: object",24,2 comments,No shares,https://facebook.com/APTouring/posts/247453050976164,
+"97    APT
+Name: brand, dtype: object","97    APTouring
+Name: fb_handle, dtype: object",APT,"Explore Japan and South Korea's fascinating capital cities before journeying by spacious coach and luxury rail through enchanting countryside, discovering contemporary and historic cultural wonders along the way. Discover Japan and South Korea with APT.#DiscoverAPT #APTLuxuryTravel #SouthKorea #Japanhttp://ow.ly/qk0N50Nurzj","97    5/04/2023 20:01
+Name: post_date_time, dtype: object",13,No comments,No shares,https://facebook.com/APTouring/posts/246954767692659,272 views
+"98    APT
+Name: brand, dtype: object","98    APTouring
+Name: fb_handle, dtype: object",APT,"The experience starts with a friendly kia ora.Rotorua is known for its bubbling mud pools, natural hot springs, as well as showcasing New Zealand's Māori Culture. Enjoy the perfect welcome with a traditional feast and performance of Haka at Te Pā Tū - New Zealand ","98    4/04/2023 20:00
+Name: post_date_time, dtype: object",15,3 comments,No shares,https://facebook.com/APTouring/posts/246438821077587,
+"99    APT
+Name: brand, dtype: object","99    APTouring
+Name: fb_handle, dtype: object",APT,"Walk around the Ancient Town in Hoi An and you’ll find a well-preserved labyrinth of shophouses and pagodas with paper lanterns zigzagging from building to building. It’s lovely at any time of the day but at night, it turns into something magical.","99    3/04/2023 18:00
+Name: post_date_time, dtype: object",680,50 comments,18 shares,https://facebook.com/APTouring/posts/245846094470193,
+"100    APT
+Name: brand, dtype: object","100    APTouring
+Name: fb_handle, dtype: object",APT,"Boasting wildlife-filled fjords, tidewater glaciers, and lush island scenery Alaska's Inside Passage has no shortage of beauty and adventure. ","100    30/03/2023 19:00
+Name: post_date_time, dtype: object",348,12 comments,6 shares,https://facebook.com/APTouring/posts/243872908000845,
+"101    APT
+Name: brand, dtype: object","101    APTouring
+Name: fb_handle, dtype: object",APT,"Savour the all-inclusive lifestyle aboard the MV Lady Eleganza, which has been made for exploring the coastlines of Croatia. ","101    29/03/2023 21:00
+Name: post_date_time, dtype: object",102,15 comments,No shares,https://facebook.com/APTouring/posts/243417384713064,
+"102    APT
+Name: brand, dtype: object","102    APTouring
+Name: fb_handle, dtype: object",APT,"Want to explore Queensland's most exhilarating routes by road?Our Driver Guide Danny Walker will ensure you have the tour of a lifetime. From navigating the infamous Bloomfield Track, to sharing his extensive local knowledge, all our guides offer unrivalled experience and passion. Discover Queensland with APT.#Queensland #Daintree #Bloomfieldtrack #4WDtouringhttps://www.aptouring.com.au/.../qld/gocy11r/apr2023-sep2023","102    27/03/2023 19:24
+Name: post_date_time, dtype: object",9,No comments,No shares,https://facebook.com/APTouring/posts/242412951480174,582 views
+"103    APT
+Name: brand, dtype: object","103    APTouring
+Name: fb_handle, dtype: object",APT,Enjoy an intimate cruising experience onboard a luxury small ship that is designed to get you up close to remote. hard to reach destinations. ,"103    25/03/2023 20:00
+Name: post_date_time, dtype: object",24,3 comments,No shares,https://facebook.com/APTouring/posts/241463894908413,
+"104    APT
+Name: brand, dtype: object","104    APTouring
+Name: fb_handle, dtype: object",APT,"Our final #luxurystay is a special one.You are invited to hop aboard our newest  River Ship, the Mekong Serenity and experience unrivalled luxury.","104    24/03/2023 20:00
+Name: post_date_time, dtype: object",50,11 comments,4 shares,https://facebook.com/APTouring/posts/240969641624505,
+"105    APT
+Name: brand, dtype: object","105    APTouring
+Name: fb_handle, dtype: object",APT,Have you ever wondered what the small towns along the Rhine in Germany are like? ,"105    23/03/2023 19:45
+Name: post_date_time, dtype: object",40,16 comments,No shares,https://facebook.com/APTouring/posts/240446368343499,
+"106    APT
+Name: brand, dtype: object","106    APTouring
+Name: fb_handle, dtype: object",APT,"Discover the beauty of the Ord River onboard your shaded river boat. Enjoy, as you pass through a variety of landscapes, from the wide expanse of Lake Kununurra through the magnificent Carlton Gorge.","106    22/03/2023 22:46
+Name: post_date_time, dtype: object",15,No comments,No shares,https://facebook.com/APTouring/posts/239932971728172,
+"107    APT
+Name: brand, dtype: object","107    APTouring
+Name: fb_handle, dtype: object",APT,"From the Rhine, to the Main and the Danube. Cruise past rolling green hills, spot fairytale like castles and explore richly historic towns on your European River cruise","107    20/03/2023 21:00
+Name: post_date_time, dtype: object",632,75 comments,6 shares,https://facebook.com/APTouring/posts/238823908505745,
+"108    APT
+Name: brand, dtype: object","108    APTouring
+Name: fb_handle, dtype: object",APT,"Discover Vietnam and Cambodia's iconic sights and hidden treasures on board APT's brand new Mekong Serenity luxury river ship. Enjoy the ever-changing scenery from your very own private balcony, relax in the luxuriously spacious lounges or perhaps take a dip in the swimming pool. For our foodie friends, you can delight in an intimate culinary journey for an authentic taste of Vietnam in the onboard Indochine restaurant with a special five-course menu.See you on board. #DiscoverAPT #MekongRiverhttps://www.aptouring.com.au/.../mekong-serenity-vietnam...","108    18/03/2023 19:01
+Name: post_date_time, dtype: object",14,2 comments,No shares,https://facebook.com/APTouring/posts/237709725283830,467 views
+"109    APT
+Name: brand, dtype: object","109    APTouring
+Name: fb_handle, dtype: object",APT,Our #luxurystay in celebration of Saint Patrick's day! ,"109    17/03/2023 20:00
+Name: post_date_time, dtype: object",21,No comments,No shares,https://facebook.com/APTouring/posts/237195542001915,
+"110    APT
+Name: brand, dtype: object","110    APTouring
+Name: fb_handle, dtype: object",APT,"There's seeing Mitchell falls, and then there's seeing Mitchell Falls from above. ","110    16/03/2023 20:40
+Name: post_date_time, dtype: object",32,6 comments,No shares,https://facebook.com/APTouring/posts/236666028721533,
+"111    APT
+Name: brand, dtype: object","111    APTouring
+Name: fb_handle, dtype: object",APT,"Only accessible via train or river, the stunning red rock formations in Ruby Canyon are something else. ","111    15/03/2023 21:01
+Name: post_date_time, dtype: object",14,No comments,No shares,https://facebook.com/APTouring/posts/236101908777945,
+"112    APT
+Name: brand, dtype: object","112    APTouring
+Name: fb_handle, dtype: object",APT,"One for the adventure lovers - Queenstown, New Zealand. ","112    14/03/2023 20:40
+Name: post_date_time, dtype: object",11,1 comment,No shares,https://facebook.com/APTouring/posts/235557715499031,
+"113    APT
+Name: brand, dtype: object","113    APTouring
+Name: fb_handle, dtype: object",APT,Have your camera ready as you witness one of the world's greatest wonders. ,"113    13/03/2023 20:15
+Name: post_date_time, dtype: object",792,17 comments,23 shares,https://facebook.com/APTouring/posts/235031282218341,
+"114    APT
+Name: brand, dtype: object","114    APTouring
+Name: fb_handle, dtype: object",APT,"Journey through the Rockies, Alaska and Eastern Canada to reveal the wonders of North America in style as APT's experts guide you. From gold-leaf service on the Rocky Mountaineer and cruises through Glacier Bay National Park to unforgettable stays at iconic hotels. With immersion into unique cultures, there are incredible experiences for every traveller at APT.","114    12/03/2023 16:45
+Name: post_date_time, dtype: object",58,8 comments,10 shares,https://facebook.com/APTouring/posts/234413512280118,
+"115    APT
+Name: brand, dtype: object","115    APTouring
+Name: fb_handle, dtype: object",APT,"An iconic landmark of Helsinki since 1887, Kämp Hotel is a #luxurystay you won’t forget. In addition to all the five-start features one would expect, including decedent dining, a luxury spa and elegant city-view suites, Kämp also offers a glimpse at a glamorous bygone era. Guests are welcome to explore the exquisite Mirror Room, which has been the scene of some of the most luxurious and significant celebrations in Finland’s history or enjoy a coffee in the very same place as famed Finnish artists, politicians and writers. And, if your tastes are a little more modern, there is also the Imprimo Collection, 450 pieces of contemporary graphic art displayed throughout the hotel. Culture and elegance. Hotel Kämp is Helsinki distilled. ","115    10/03/2023 20:00
+Name: post_date_time, dtype: object",13,No comments,No shares,https://facebook.com/APTouring/posts/233368182384651,
+"116    APT
+Name: brand, dtype: object","116    APTouring
+Name: fb_handle, dtype: object",APT,"The Canadian Rockies remain one of the world’s most pristine destinations. Whether you board the famous Rocky Mountaineer or hit the road, your journey into the Canadian Rockies will be sure to dazzle. ","116    9/03/2023 21:01
+Name: post_date_time, dtype: object",40,3 comments,No shares,https://facebook.com/APTouring/posts/232808969107239,
+"117    APT
+Name: brand, dtype: object","117    APTouring
+Name: fb_handle, dtype: object",APT,"Travel by 4WD and experience 9 incredible destinations.From Uluru to Cooper Pedy, breathtaking Wlipena Pound and Ikara-Flinders Ranges before ending your tour in the gorgeous Clare Valley, where you can enjoy delicious food and wine. ","117    8/03/2023 20:00
+Name: post_date_time, dtype: object",6,2 comments,2 shares,https://facebook.com/APTouring/posts/232210269167109,
+"118    APT
+Name: brand, dtype: object","118    APTouring
+Name: fb_handle, dtype: object",APT,Experience the natural beauty and rugged scenery of the Kimberley and Australia’s outback with APT in 2024. ,"118    6/03/2023 20:01
+Name: post_date_time, dtype: object",18,2 comments,2 shares,https://facebook.com/APTouring/posts/231025399285596,
+"119    APT
+Name: brand, dtype: object","119    APTouring
+Name: fb_handle, dtype: object",APT,"Today our wonderful guests joined us for the first South Korea departure of the season, and they have much to look forward to!From sampling the outstanding Korean Royal cuisine to hand-crafting a mini gayageum instrument, guests on this tour are promised a full immersion into the region's rich and diverse food and culture.","119    5/03/2023 20:00
+Name: post_date_time, dtype: object",15,No comments,No shares,https://facebook.com/APTouring/posts/230492772672192,
+"120    APT
+Name: brand, dtype: object","120    APTouring
+Name: fb_handle, dtype: object",APT,"Elegant, romantic, and unapologetically Parisienne, Hotel du Collectionneur Paris is our #luxurystay of choice when visiting the city of love.Perfectly situated in view of the Eiffel tower and the Champs Elysées, Hotel Du Collectionneaur is a masterclass in chic, featuring Art Deco design, tastefully decorated rooms, and gourmet dining. The guest experience is unparalleled, including enviable spa facilities, charming views, and an improbably large lush private courtyard, which serves as a luxurious escape from the hustle and bustle of Paris. Just be careful you remember to explore Paris because once you step into the foyer, it will be very hard to leave.  ","120    3/03/2023 20:00
+Name: post_date_time, dtype: object",166,18 comments,6 shares,https://facebook.com/APTouring/posts/229421942779275,
+"121    APT
+Name: brand, dtype: object","121    APTouring
+Name: fb_handle, dtype: object",APT,A 21-day adventure from Hanoi to Siem Reap to discover the best of Vietnam and Cambodia. ,"121    1/03/2023 20:11
+Name: post_date_time, dtype: object",36,3 comments,5 shares,https://facebook.com/APTouring/posts/228316352889834,
+"122    APT
+Name: brand, dtype: object","122    APTouring
+Name: fb_handle, dtype: object",APT,"On your voyage along the Antarctic Peninsula, you can expect to see some joyful locals.","122    28/02/2023 19:00
+Name: post_date_time, dtype: object",682,8 comments,27 shares,https://facebook.com/APTouring/posts/227770022944467,
+"123    APT
+Name: brand, dtype: object","123    APTouring
+Name: fb_handle, dtype: object",APT,There is nothing quite like crossing the Capilano Suspension Bridge first thing in the morning. ,"123    26/02/2023 17:00
+Name: post_date_time, dtype: object",77,15 comments,3 shares,https://facebook.com/APTouring/posts/226995549688581,
+"124    APT
+Name: brand, dtype: object","124    APTouring
+Name: fb_handle, dtype: object",APT,Our #luxurystay Wilderness Lodges come with all the creature comforts one would NOT expect in the rugged Kimberley region.,"124    24/02/2023 20:00
+Name: post_date_time, dtype: object",35,9 comments,No shares,https://facebook.com/APTouring/posts/226321756422627,
+"125    APT
+Name: brand, dtype: object","125    APTouring
+Name: fb_handle, dtype: object",APT,"An Italian Vineyard famous for its red Amarone wine, say no more. ","125    23/02/2023 20:00
+Name: post_date_time, dtype: object",19,No comments,3 shares,https://facebook.com/APTouring/posts/226068223114647,
+"126    APT
+Name: brand, dtype: object","126    APTouring
+Name: fb_handle, dtype: object",APT,"After a day of exploring the bustling city of Ho Chi Minh, you will be ready to enjoy a delicious dinner. Showcasing contemporary Vietnamese cuisine, Vietnam-house is founded by celebrity chef Luke Nguyen","126    21/02/2023 19:00
+Name: post_date_time, dtype: object",263,10 comments,7 shares,https://facebook.com/APTouring/posts/225678489820287,
+"127    APT
+Name: brand, dtype: object","127    APTouring
+Name: fb_handle, dtype: object",APT,"A sumptuous setting and an exceptional view, not to mention the delicious menu. ","127    20/02/2023 19:55
+Name: post_date_time, dtype: object",17,No comments,2 shares,https://facebook.com/APTouring/posts/225488473172622,
+"128    APT
+Name: brand, dtype: object","128    APTouring
+Name: fb_handle, dtype: object",APT,"What can you expect on a Kimberley land tour?Towering ochre cliffs. Thundering waterfalls. Boundless plains and magical sunsets. Experience awe-inspiring national parks, signature experiences that perfectly capture the unique highlights that await, and expert guides to show you the way.","128    18/02/2023 20:00
+Name: post_date_time, dtype: object",655,11 comments,28 shares,https://facebook.com/APTouring/posts/225133966541406,
+"129    APT
+Name: brand, dtype: object","129    APTouring
+Name: fb_handle, dtype: object",APT,Embrace your hallmark-Christmas movie moment at The Westin Resort & Spa Whistler.,"129    17/02/2023 20:00
+Name: post_date_time, dtype: object",230,12 comments,7 shares,https://facebook.com/APTouring/posts/224945343226935,
+"130    APT
+Name: brand, dtype: object","130    APTouring
+Name: fb_handle, dtype: object",APT,Discover the Kimberley with APT Expedition Leader Craig.,"130    15/02/2023 20:02
+Name: post_date_time, dtype: object",64,4 comments,11 shares,https://facebook.com/APTouring/posts/224588989929237,
+"131    APT
+Name: brand, dtype: object","131    APTouring
+Name: fb_handle, dtype: object",APT,APT Europe Tour Director Janos shares with us how he fell in love with travel and touring at the age of 14.,"131    14/02/2023 19:01
+Name: post_date_time, dtype: object",11,1 comment,No shares,https://facebook.com/APTouring/posts/224375709950565,
+"132    APT
+Name: brand, dtype: object","132    APTouring
+Name: fb_handle, dtype: object",APT,"Join travel experts from APT at a travel showcase featuring informative talks on guided journeys through Europe, Canada & Alaska, Australia & New Zealand and hear about our extensive range of exotic holidays in Vietnam & Cambodia, Egypt, Antarctica and many more.  ","132    13/02/2023 18:39
+Name: post_date_time, dtype: object",10,No comments,No shares,https://facebook.com/APTouring/posts/224193503302119,
+"133    APT
+Name: brand, dtype: object","133    APTouring
+Name: fb_handle, dtype: object",APT,"One of the world's last true wildernesses, Western Australia's Kimberley region is best discovered onboard a small ship expedition cruise. ","133    11/02/2023 20:00
+Name: post_date_time, dtype: object",672,9 comments,31 shares,https://facebook.com/APTouring/posts/223814203340049,
+"134    APT
+Name: brand, dtype: object","134    APTouring
+Name: fb_handle, dtype: object",APT,"Located on the banks of Thu Bon River in the UNESCO World Heritage Site of Hoi An, a night at our #luxurystay Hotel Royal Hoi An - MGallery will be one to remember. ","134    10/02/2023 20:00
+Name: post_date_time, dtype: object",18,No comments,2 shares,https://facebook.com/APTouring/posts/223626833358786,
+"135    APT
+Name: brand, dtype: object","135    APTouring
+Name: fb_handle, dtype: object",APT,"Are you ready to travel with ease?Taking a guided tour to impressive destinations, all-inclusive luxury and the ability to make the tour your own with freedom of choice and personalisation. ","135    9/02/2023 19:50
+Name: post_date_time, dtype: object",28,No comments,No shares,https://facebook.com/APTouring/posts/223448830043253,
+"136    APT
+Name: brand, dtype: object","136    APTouring
+Name: fb_handle, dtype: object",APT,"We've mapped out 15 magnificent days along the Rhine, Maine and Danube rivers just for you.Will you be joining us? ","136    7/02/2023 19:03
+Name: post_date_time, dtype: object",58,25 comments,5 shares,https://facebook.com/APTouring/posts/223087260079410,
+"137    APT
+Name: brand, dtype: object","137    APTouring
+Name: fb_handle, dtype: object",APT,"Feel the exhilaration and excitement of your first Zodiac experience in the Kimberley. Meander along the King George River, passing towering cliffs before arriving at the base of King George Falls. Watch on in awe as the water tumbles down the sandstone. ","137    6/02/2023 20:00
+Name: post_date_time, dtype: object",611,19 comments,28 shares,https://facebook.com/APTouring/posts/222911586763644,
+"138    APT
+Name: brand, dtype: object","138    APTouring
+Name: fb_handle, dtype: object",APT,Be mesmerised by the size of these impressive structures standing tall for thousands of years. Wander through the Three Great Pyramids whilst listening to your egyptologist as you are guided through the ancient ruins. ,"138    4/02/2023 20:00
+Name: post_date_time, dtype: object",15,No comments,2 shares,https://facebook.com/APTouring/posts/222545273466942,
+"139    APT
+Name: brand, dtype: object","139    APTouring
+Name: fb_handle, dtype: object",APT,"Where will you be a year from now? You could be floating through the magical icebergs of Antarctica on our #luxurystay, Le Boreal, Ponant ","139    3/02/2023 19:00
+Name: post_date_time, dtype: object",32,4 comments,2 shares,https://facebook.com/APTouring/posts/222346530153483,
+"140    APT
+Name: brand, dtype: object","140    APTouring
+Name: fb_handle, dtype: object",APT,Experience 14 destinations cruising from Amsterdam to Budapest with a variety of experiences along the way that will make your European river cruise unforgettable. ,"140    2/02/2023 20:00
+Name: post_date_time, dtype: object",357,37 comments,10 shares,https://facebook.com/APTouring/posts/222159916838811,
+"141    APT
+Name: brand, dtype: object","141    APTouring
+Name: fb_handle, dtype: object",APT,"Outback Dan has a well-earned reputation as the man to visit when in Longreach.A true charismatic character, guests always enjoy being regaled by Dan's stories of the family's long and proud history in the town. APT guests also get to enjoy an exclusive tour of the beautiful Camden Park homestead Dan and his family call home.Of course, as much as everyone enjoys the whip-cracking demonstration and Dan's farming anecdotes, it really is the family's homemade lemonade scones that get visitors talking.Discover Australia with APT.#DiscoverAPT #APTLuxuryTravel","141    1/02/2023 18:57
+Name: post_date_time, dtype: object",10,2 comments,No shares,https://facebook.com/APTouring/posts/221946273526842,357 views
+"142    APT
+Name: brand, dtype: object","142    APTouring
+Name: fb_handle, dtype: object",APT,"Explore the vibrant majesty of the heart of Southeast Asia with APT. Bursting with colour and culture, Vietnam and Cambodia are a feast for all the senses. Feel immersed in the culture, enjoy local cuisine and experience true wonder and delight as you see Vietnam and Cambodia in a whole new light with APT.Before you discover the world, discover APT.https://www.aptouring.com.au/.../asia/vemr25/jul2023-apr2024#DiscoverAPT #Vietnam #Cambodia #APTLuxuryTravel","142    30/01/2023 20:01
+Name: post_date_time, dtype: object",8,1 comment,No shares,https://facebook.com/APTouring/posts/221588183562651,848 views
+"143    APT
+Name: brand, dtype: object","143    APTouring
+Name: fb_handle, dtype: object",APT,"Discover Madrid, the heart of Spain.A pulsing city known for its architecture and prestigious art scene, one can easily lose a day here just wandering the narrow streets surrounding the Plaza Mayor or marvelling at the beauty of the Royal Palace. Discover Madrid with APT.http://ow.ly/8Qlk50MvJ6P#DiscoverAPT #APTLuxuryTravel #Madrid #Spain #visitspain","143    29/01/2023 19:45
+Name: post_date_time, dtype: object",3,No comments,No shares,https://facebook.com/APTouring/posts/221401180248018,396 views
+"144    APT
+Name: brand, dtype: object","144    APTouring
+Name: fb_handle, dtype: object",APT,"This week’s #luxurystay is The Setai Tel Aviv, Israel.","144    27/01/2023 19:00
+Name: post_date_time, dtype: object",10,No comments,No shares,https://facebook.com/APTouring/posts/220960460292090,
+"145    APT
+Name: brand, dtype: object","145    APTouring
+Name: fb_handle, dtype: object",APT,"It is 2023, and the world is your oyster, but where to begin? Tap the link below to read APT's top 5 experiences to discover in 2023.","145    25/01/2023 18:10
+Name: post_date_time, dtype: object",156,No comments,5 shares,https://facebook.com/APTouring/posts/220529230335213,
+"146    APT
+Name: brand, dtype: object","146    APTouring
+Name: fb_handle, dtype: object",APT,"Situated between two other striking tourist attractions, the Museum of Fine Arts and the Palace of Art, Heroes Square is one location not to be missed when visiting Budapest. ","146    24/01/2023 19:45
+Name: post_date_time, dtype: object",18,1 comment,No shares,https://facebook.com/APTouring/posts/220349477019855,
+"147    APT
+Name: brand, dtype: object","147    APTouring
+Name: fb_handle, dtype: object",APT,"With so many significant sites to see and rich history to explore, an experienced guide is a must when visiting Isreal, especially in Jerusalem, a holy city of high importance to people of Christian, Jewish and Islamic faiths. ","147    23/01/2023 18:00
+Name: post_date_time, dtype: object",7,No comments,2 shares,https://facebook.com/APTouring/posts/220101093711360,

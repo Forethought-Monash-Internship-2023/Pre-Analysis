@@ -1,0 +1,35 @@
+---
+title: "Pre_Analysis_V1"
+author: "GUI GAO & Chatpisut Magic Makornkhan"
+date: "2023-08-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(tidytext)
+library(stringr)
+library(lubridate)
+```
+
+
+```{r}
+IG_Telco_posts_clean <- read.csv("clean_data/Instagram/IG_Telco_posts.csv")
+IG_Telco_comments_clean <- read.csv("clean_data/Instagram/IG_Telco_comments.csv")
+FB_Telco_posts_clean <- read.csv("clean_data/Facebook/FB_Telco_posts.csv")
+FB_Telco_comments_clean <- read.csv("clean_data/Facebook/FB_Telco_comments.csv")
+```
+
+# Analysis
+
+```{r}
+
+```
+
+
