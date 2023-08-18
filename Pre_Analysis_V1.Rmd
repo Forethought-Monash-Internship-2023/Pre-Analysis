@@ -32,4 +32,18 @@ FB_Telco_comments_clean <- read.csv("clean_data/Facebook/FB_Telco_comments.csv")
 
 ```
 
+# ----------- Content Analysis --------------- 
+## Use wordcloud as the first step to get the idea of contents grouping
+## Use Principal Components to group types of contents for posts and comments in order to categorize them into meaningful groups
+## Find which groups related to other variables
+
+# ----------- Date Time Analysis --------------- 
+## Basic relationships of optimum and general date/time relationship with social media reactions
+
+# ----------- Findings --------------- 
+## Relationships of Date/Time to other variables and reactions
+## Relationships of word cloud to reactions
+## Search more on what client might want out of this
+
+
 
