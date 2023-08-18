@@ -44,6 +44,9 @@ FB_Telco_comments_clean <- read.csv("clean_data/Facebook/FB_Telco_comments.csv")
 ## Relationships of Date/Time to other variables and reactions
 ## Relationships of word cloud to reactions
 ## Search more on what client might want out of this
+## Machine Learning on variables across others
+## Brand auditing relative to time and their performance throughtout posts from past to recent
+## Comparison between brands
 
 
 
