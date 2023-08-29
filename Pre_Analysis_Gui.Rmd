@@ -9,6 +9,14 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(readxl)
+library(tidyverse)
+library(tidytext)
+library(stringr)
+library(lubridate)
+```
+
 
 ```{r}
 IG_Telco_posts_clean <- read.csv("clean_data/Instagram/IG_Telco_posts.csv")
