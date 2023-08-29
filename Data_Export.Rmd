@@ -89,7 +89,7 @@ IG_Telco_posts_wip$post_date <-
   mdy(IG_Telco_posts_wip$post_date)
 
 # Clean Unnecessary Texts from Columns 
-IG_Telco_posts_clean <- IG_Telco_posts_wip %>%
+ig_posts <- IG_Telco_posts_wip %>%
   mutate(brand = str_extract(brand, "Optus|Telstra|Vodafone AU|amaysim")) %>% 
   rename("numbers" = "Numbers",
          "interactions" = "States")
@@ -112,7 +112,7 @@ IG_Telco_comments$likes <- gsub("\\D", "", IG_Telco_comments$likes)
 IG_Telco_comments$comment_date_actual <-
   mdy(IG_Telco_comments$comment_date_actual)
 
-IG_Telco_comments_clean <- IG_Telco_comments %>%
+ig_comments_wip <- IG_Telco_comments %>%
   select(commenter_username, comment_content,
          comment_date_actual, likes, post_url) %>%
   rename("Username" = "commenter_username",
@@ -126,6 +126,8 @@ IG_Telco_comments_clean <- IG_Telco_comments %>%
          "date" = "Date",
          "likes_number" = "Likes_number",
          "post_url" = "Post_url")
+
+ig_comments <- distinct(ig_comments_wip)
 
 ```
 ## !! Clean !!
@@ -192,8 +194,14 @@ FB_Telco_posts_wip <- FB_Telco_posts_wip %>%
 FB_Telco_posts_wip <- FB_Telco_posts_wip %>% 
   filter(!grepl("reel post - username not found", brand))
 
+FB_Telco_posts_date <- as.Date(as.POSIXct(FB_Telco_posts_wip$post_date,
+                           format="%Y-%m-%d", tz = "" 
+                            ))
+
+FB_Telco_posts_wip$post_date <- FB_Telco_posts_date
+
 # Change df to confirmed clean df
-FB_Telco_posts_clean <- FB_Telco_posts_wip
+fb_posts <- FB_Telco_posts_wip
 
 ```
 ## !! Clean !!
@@ -230,24 +238,79 @@ FB_Telco_comments_wip <- FB_Telco_comments_wip %>%
          "post_time_hr" = "Hour") %>% 
   select(-c("comment_date"))
 
-## !! Not Clean Yet !!
+
 
 # Change df to confirmed clean df
-FB_Telco_comments_clean <- FB_Telco_comments_wip
+fb_comments <- FB_Telco_comments_wip
 ```
 ## !! Clean !!
 
 
+#IG Joined Post-Comment
+```{r}
+ig_postcomt <- ig_posts %>% 
+  left_join(ig_comments, by = "post_url")
+
+ig_postcomt <- ig_postcomt %>% 
+  rename("tagged_username" = "username.x",
+         "comment_username" = "username.y")
+
+ig_postcomt <- ig_postcomt %>% 
+  mutate(post_caption = ifelse(is.na(post_caption), 0, post_caption))
+
+#visdat::vis_miss(ig_postcomt)
+```
+
+
+#FB Joined Post-Comment
+```{r}
+fb_postcomt <- fb_posts %>% 
+  left_join(fb_comments, by = "post_url")
+
+fb_postcomt <- fb_postcomt %>% 
+  rename("post_date" = "post_date.x",
+         "comment_date" = "post_date.y")
+
+fb_postcomt <- fb_postcomt %>% 
+  mutate(likes = ifelse(is.na(likes), 0, likes))
+
+#visdat::vis_miss(fb_postcomt)
+```
+
+                            
+                            
 ```{r}
 
-write.csv(IG_Telco_comments_clean,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/IG_Telco_comments.csv', row.names=FALSE)
+write.csv(ig_comments,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/Instagram/ig_telco_comments.csv', row.names=FALSE)
 
-write.csv(IG_Telco_posts_clean,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/IG_Telco_posts.csv', row.names=FALSE)
+write.csv(ig_posts,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/Instagram/ig_telco_posts.csv', row.names=FALSE)
 
-write.csv(FB_Telco_posts_clean,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/FB_Telco_posts.csv', row.names=FALSE)
+write.csv(fb_posts,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/Facebook/fb_telco_posts.csv', row.names=FALSE)
 
-write.csv(FB_Telco_comments_clean,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/FB_Telco_comments.csv', row.names=FALSE)
+write.csv(fb_comments,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/Facebook/fb_telco_comments.csv', row.names=FALSE)
+
+write.csv(ig_postcomt,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/Instagram/ig_telco_postcomments.csv', row.names=FALSE)
+
+write.csv(fb_postcomt,file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/clean_data/Facebook/fb_telco_postcomments.csv', row.names=FALSE)
 
 ```
 
 
+
+## Change name of dataframe to all lowercase
+## janitor::clean_names()
+
+```{r}
+test <- FB_Telco_posts_clean %>% 
+  right_join(FB_Telco_comments_clean, by = "post_url")
+
+test <- test %>% 
+  mutate(likes = ifelse(is.na(likes), 0, likes))
+
+visdat::vis_miss(test)
+
+check <- test %>% 
+  filter(is.na(comment_content))
+
+lubridate::POSIXct()
+```
