@@ -1,0 +1,106 @@
+---
+title: "Pre_Analysis_V1"
+author: "GUI GAO & Chatpisut Magic Makornkhan"
+date: "2023-08-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+IG_Telco_posts_clean <- read.csv("clean_data/Instagram/IG_Telco_posts.csv")
+IG_Telco_comments_clean <- read.csv("clean_data/Instagram/IG_Telco_comments.csv")
+FB_Telco_posts_clean <- read.csv("clean_data/Facebook/FB_Telco_posts.csv")
+FB_Telco_comments_clean <- read.csv("clean_data/Facebook/FB_Telco_comments.csv")
+FB_postcomt <- read.csv("clean_data/Facebook/fb_telco_postcomments.csv")
+IG_postcomt <- read.csv("clean_data/Instagram/ig_telco_postcomments.csv")
+```
+
+## Cleaning Facebook Dataset
+
+```{r}
+FB_postcomt$post_date <- as.Date(FB_postcomt$post_date)
+
+FB_comt <- FB_postcomt %>%
+  select(post_url, comment_content) %>%
+  aggregate(comment_content ~ post_url, FUN = paste, collapse = " ")
+
+FB_number <- FB_postcomt %>%
+  select(post_url, likes) %>%
+  group_by(post_url) %>%
+  mutate(likes = sum(likes))
+
+FB_number[!duplicated(FB_number$post_url), ] -> FB_number
+FB_postcomt[!duplicated(FB_postcomt$post_url), ] -> FB_postcomt
+
+FB_postcomt <- FB_postcomt %>%
+  select(!c(username, comment_content, likes, 
+            comment_date, post_time_hr)) %>%
+  left_join(FB_number, by = "post_url")
+
+FB_postcomt <- FB_postcomt %>%
+  left_join(FB_comt, by = "post_url")
+
+FB_postcomt <- FB_postcomt %>%
+  mutate(comment_content = ifelse(is.na(comment_content), "", comment_content))
+```
+
+## Cleaning Instagram Dataset
+
+```{r}
+IG_postcomt$numbers <- as.numeric(gsub(",", "", IG_postcomt$numbers))
+IG_postcomt$post_date <- as.Date(IG_postcomt$post_date)
+
+IG_comt <- IG_postcomt %>%
+  select(post_url, content) %>%
+  aggregate(content ~ post_url, FUN = paste, collapse = " ")
+
+IG_number <- IG_postcomt %>%
+  select(post_url, likes_number) %>%
+  group_by(post_url) %>%
+  mutate(likes_number = sum(likes_number))
+
+IG_number[!duplicated(IG_number$post_url), ] -> IG_number
+IG_postcomt[!duplicated(IG_postcomt$post_url), ] -> IG_postcomt
+
+IG_postcomt <- IG_postcomt %>%
+  select(!c(comment_username, content, date, 
+            likes_number)) %>%
+  left_join(IG_number, by = "post_url") %>%
+  mutate(likes_number = ifelse(is.na(likes_number), 0, likes_number))
+
+IG_postcomt <- IG_postcomt %>%
+  left_join(IG_comt, by = "post_url")
+
+IG_postcomt <- IG_postcomt %>%
+  mutate(content = ifelse(is.na(content), "", content))
+```
+
+
+# Analysis
+
+```{r}
+
+```
+
+# ----------- Content Analysis --------------- 
+## Use wordcloud as the first step to get the idea of contents grouping
+## Use Principal Components to group types of contents for posts and comments in order to categorize them into meaningful groups
+## Find which groups related to other variables
+
+# ----------- Date Time Analysis --------------- 
+## Basic relationships of optimum and general date/time relationship with social media reactions
+
+# ----------- Findings --------------- 
+## Relationships of Date/Time to other variables and reactions
+## Relationships of word cloud to reactions
+## Search more on what client might want out of this
+## Machine Learning on variables across others
+## Brand auditing relative to time and their performance throughtout posts from past to recent
+## Comparison between brands
+
+
+
