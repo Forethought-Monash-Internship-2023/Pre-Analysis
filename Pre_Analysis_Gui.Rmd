@@ -6,7 +6,8 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = F)
 ```
 
 ```{r}
@@ -15,6 +16,9 @@ library(tidyverse)
 library(tidytext)
 library(stringr)
 library(lubridate)
+library(wordcloud2)
+library(RColorBrewer)
+library(tidytext)
 ```
 
 
@@ -26,6 +30,7 @@ FB_Telco_comments_clean <- read.csv("clean_data/Facebook/FB_Telco_comments.csv")
 FB_postcomt <- read.csv("clean_data/Facebook/fb_telco_postcomments.csv")
 IG_postcomt <- read.csv("clean_data/Instagram/ig_telco_postcomments.csv")
 ```
+
 
 ## Cleaning Facebook Dataset
 
@@ -90,10 +95,340 @@ IG_postcomt <- IG_postcomt %>%
 
 # Analysis
 
+## IG_post wordcloud --- plan A
+
+```{r}
+stopword <- get_stopwords(source = "snowball")
+
+IG_post_word <- IG_postcomt %>%
+  mutate(id = row_number()) %>%
+  select(id, brand, post_caption, post_date) %>%
+  unnest_tokens(output = word,
+                input = post_caption,
+                token = "words") %>%
+  anti_join(stopword, by = "word") %>%
+  filter(!str_detect(word, '^[[:digit:]]'))
+
+colPalette <- c("#39A8AF", "#FECD03","#0060AE", "#0A8AD2", 
+                "#e82f89", "#9b0082","#ef2d1e", "#FF5500")
+
+IG_post_word %>%
+  group_by(word) %>%
+  summarise(freq = n()) %>%
+  top_n(150) %>%
+  wordcloud2(color = rep_len(colPalette, nrow(IG_post_word)),
+             size = 0.6,
+             shape = "circle")
+```
+
+## FB_post wordcloud --- plan A
+
+```{r}
+FB_post_word <- FB_postcomt %>%
+  mutate(id = row_number()) %>%
+  select(id, brand, content, post_date, post_time) %>%
+  unnest_tokens(output = word,
+                input = content,
+                token = "words") %>%
+  anti_join(stopword, by = "word") %>%
+  filter(!str_detect(word, '^[[:digit:]]'))
+
+FB_post_word %>%
+  group_by(word) %>%
+  summarise(freq = n()) %>%
+  top_n(150) %>%
+  wordcloud2(color = rep_len(colPalette, nrow(FB_post_word)),
+             size = 0.6,
+             shape = "circle")
+```
+
+## IG_post wordcloud --- plan B--Need
+
+```{r}
+library(wordcloud)
+IG_post_word %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("black", "#c30101"),
+                   max.words = 150)
+```
+
+## IG_post wordcloud --- plan C
+
+```{r}
+# %>% filter(brand == "Optus")
+
+library(quanteda)
+library(quanteda.textplots)
+dfm(IG_post_word$word, remove_punct = TRUE) %>%
+  dfm_trim(min_termfreq = 4) -> text_word
+
+col <- sapply(seq(0.4, 1, 0.1), function(x) adjustcolor("#940000", x))
+textplot_wordcloud(text_word,
+                   adjust = 0.5,
+                   min_size = 1,
+                   random_order = F,
+                   color = col,
+                   rotation = F)
+```
+
+## IG_post_date Total Number Analysis
+
+```{r}
+IG_post_wday <- IG_postcomt %>%
+  mutate(numbers = ifelse(interactions == "likes", numbers, 0),
+         post_wday = wday(post_date))
+
+IG_post_wday %>%
+  group_by(post_wday) %>%
+  summarise(count = sum(numbers)) %>%
+  ggplot(aes(x = post_wday,
+             y = count)) +
+  geom_area(alpha = 0.2) +
+  stat_smooth(se = F,
+              geom = "area",
+              method = "loess",
+              span = 0.8,
+              alpha = 0.2,
+              fill = "#940000") +
+  scale_x_continuous("Day of Week",
+                     labels = 1:7,
+                     breaks = 1:7) +
+  scale_y_continuous("Total Number of Likes",
+                     labels = scales::comma) +
+  theme_minimal()
+```
+
+## IG_post_date Number of Different Brands
+
+```{r}
+IG_post_wday %>%
+  group_by(brand, post_wday) %>%
+  summarise(count = sum(numbers)) %>%
+  ggplot(aes(x = post_wday,
+             y = count,
+             fill = brand)) +
+  geom_bar(show.legend = F,
+           stat = "identity",
+           alpha = 0.7) +
+  scale_fill_manual(values = c("#FF5500", "#39A8AF", "#0060AE", "#ef2d1e")) +
+  scale_x_continuous("Day of Week",
+                     labels = 1:7,
+                     breaks = 1:7) +
+  scale_y_continuous("Number of Likes from Different Brands",
+                     labels = scales::comma) +
+  facet_wrap(~brand, scales = "free") +
+  theme_minimal()
+```
+
+## FB_post_date Total Number Analysis
+
+```{r}
+FB_post_wday <- FB_postcomt %>%
+  mutate(post_wday = wday(post_date))
+
+FB_post_wday %>%
+  group_by(post_wday) %>%
+  summarise(count = sum(reactions)) %>%
+  ggplot(aes(x = post_wday,
+             y = count)) +
+  geom_area(alpha = 0.2) +
+  stat_smooth(se = F,
+              geom = "area",
+              method = "loess",
+              span = 0.8,
+              alpha = 0.2,
+              fill = "#940000") +
+  scale_x_continuous("Day of Week",
+                     labels = 1:7,
+                     breaks = 1:7) +
+  scale_y_continuous("Total Number of Likes",
+                     labels = scales::comma) +
+  theme_minimal()
+```
+
+## FB_post_date Number of Different Brands
+
+```{r}
+FB_post_wday %>%
+  group_by(brand, post_wday) %>%
+  summarise(count = sum(reactions)) %>%
+  ggplot(aes(x = post_wday,
+             y = count,
+             fill = brand)) +
+  geom_bar(show.legend = F,
+           stat = "identity",
+           alpha = 0.7) +
+  scale_fill_manual(values = c("#FF5500", "#39A8AF", 
+                               "#0060AE", "#ef2d1e")) +
+  scale_x_continuous("Day of Week",
+                     labels = 1:7,
+                     breaks = 1:7) +
+  scale_y_continuous("Number of Likes from Different Brands",
+                     labels = scales::comma) +
+  facet_wrap(~brand, scales = "free") +
+  theme_minimal()
+```
+
+## IG_post Sentiment Analysis
+
+```{r}
+IG_post_word %>%
+  inner_join(get_sentiments("bing")) %>%
+  mutate(Date = as.Date(post_date, format = "%m/%d/%Y"),
+         Year = year(post_date),
+         Month = month(post_date),
+         Date = str_c(Year, "-",
+                      Month, "-15"),
+         Date = as.Date(Date)) %>%
+  count(brand, index = Date, sentiment) %>%
+  pivot_wider(names_from = sentiment,
+              values_from = n,
+              values_fill = 0) %>%
+  mutate(sentiment = positive - negative) %>%
+  ggplot(aes(x = index,
+             y = sentiment,
+             fill = brand)) +
+  geom_col(show.legend = F,
+           alpha = 0.7) +
+  scale_fill_manual(values = c("#FF5500", "#39A8AF", 
+                               "#0060AE", "#ef2d1e")) +
+  facet_wrap(~brand, ncol = 2,
+             scales = "free_y") +
+  theme_minimal() +
+  labs(x = "Date")
+```
+
+## FB_post Sentiment Analysis-Need
+
+```{r}
+FB_post_word %>%
+  inner_join(get_sentiments("bing")) %>%
+  mutate(Hour = str_sub(post_time, 1, 2),
+         Date = as.Date(post_date, format = "%m/%d/%Y"),
+         Year = year(post_date),
+         Month = month(post_date),
+         Date = str_c(Year, "-",
+                      Month, "-15"),
+         Date = as.Date(Date)) %>%
+  count(brand, index = Hour, sentiment) %>%
+  pivot_wider(names_from = sentiment,
+              values_from = n,
+              values_fill = 0) %>%
+  mutate(sentiment = positive - negative) %>%
+  ggplot(aes(x = index,
+             y = sentiment,
+             fill = brand)) +
+  geom_col(show.legend = F,
+           alpha = 0.7) +
+  scale_fill_manual(values = c("#FF5500", "#39A8AF", 
+                               "#0060AE", "#ef2d1e")) +
+  facet_wrap(~brand, ncol = 2,
+             scales = "free") +
+  theme_minimal() +
+  labs(x = "Hour")
+```
+
+## IG_commont Sentiment Analysis
+### wordcloud--No need
+```{r}
+stopword <- get_stopwords(source = "snowball")
+
+IG_com_word <- IG_Telco_posts_clean %>%
+  inner_join(IG_Telco_comments_clean, by = "post_url") %>%
+  mutate(id = row_number()) %>%
+  select(id, brand, content, date) %>%
+  unnest_tokens(output = word,
+                input = content,
+                token = "words") %>%
+  anti_join(stopword, by = "word") %>%
+  filter(!str_detect(word, '^[[:digit:]]'))
+
+colPalette <- c("#39A8AF", "#FECD03","#0060AE", "#0A8AD2", 
+                "#e82f89", "#9b0082","#ef2d1e", "#FF5500")
+
+IG_com_word %>%
+  inner_join(get_sentiments("bing")) %>%
+  group_by(word) %>%
+  summarise(freq = n()) %>%
+  top_n(150) %>%
+  wordcloud2(color = rep_len(colPalette, nrow(IG_com_word)),
+             size = 0.6,
+             shape = "circle")
+```
+
+### Need
+
+```{r}
+theme_lyrics <- function(aticks = element_blank(),
+                         pgminor = element_blank(),
+                         lt = element_blank(),
+                         lp = "none")
+{
+  theme(plot.title = element_text(hjust = 0.5), #Center the title
+        axis.ticks = aticks, #Set axis ticks to on or off
+        panel.grid.minor = pgminor, #Turn the minor grid lines on or off
+        legend.title = lt, #Turn the legend title on or off
+        legend.position = lp) #Turn the legend on or off
+}
+```
+
+### No need
+```{r}
+library(textdata)
+IG_com_word %>%
+  inner_join(get_sentiments("nrc")) %>%
+  count(brand, sentiment) %>%
+  mutate(sentiment = reorder(sentiment, n),
+         brand = reorder(brand, n)) %>%
+  ggplot(aes(x = sentiment,
+             y = n,
+             fill = sentiment)) +
+  geom_col(alpha = 0.8) +
+  facet_wrap(~brand, scales = "free_x") +
+  theme_lyrics() +
+  theme(panel.grid.major.x = element_blank(),
+        axis.text.x = element_blank()) +
+  labs(x = NULL, y = NULL) +
+  ggtitle("Sentiment Analysis") +
+  coord_flip()
+```
+
+### Need
+```{r}
+library(webr)
+IG_com_word %>%
+  inner_join(get_sentiments("nrc")) %>%
+  count(brand, sentiment) %>%
+  PieDonut(aes(sentiment, count = n),
+           labelposition = 1,
+           r0 = 0.82)
+```
+
+### tf-idf table-Need
+```{r}
+IG_com_word %>%
+  anti_join(stopword) %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(brand, word, sort = T) %>%
+  bind_tf_idf(term = word,
+              document = brand,
+              n = n) %>%
+  mutate(tf_idf = tf_idf * 100) %>%
+  arrange(desc(tf_idf)) %>%
+  filter(tf_idf >= 1)
+# High value means that word has a high frequency within a document but is quite rare over all documents. If a word occurs in a lot of documents idf will be close to zero, so `tf_idf` value will be small.
+```
+
+### PCA for tf-idf--Need
 ```{r}
 
 ```
 
+ 
 # ----------- Content Analysis --------------- 
 ## Use wordcloud as the first step to get the idea of contents grouping
 ## Use Principal Components to group types of contents for posts and comments in order to categorize them into meaningful groups
