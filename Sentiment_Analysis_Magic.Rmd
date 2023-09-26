@@ -1,0 +1,244 @@
+---
+title: "Sentiment Analysis_Magic"
+author: "Chatpisut Makornkhan"
+date: "2023-08-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(tidytext)
+library(stringr)
+library(lubridate)
+library(ggplot2)
+library(wordcloud)
+library(wordcloud2)
+library(reshape2)
+library(mice)
+library(openai)
+library(hms)
+```
+
+
+```{r}
+ig_posts <- read.csv("clean_data/Instagram/ig_telco_posts.csv")
+ig_comments <- read.csv("clean_data/Instagram/ig_telco_comments.csv")
+fb_posts <- read.csv("clean_data/Facebook/fb_telco_posts.csv")
+fb_comments <- read.csv("clean_data/Facebook/fb_telco_comments.csv")
+fb_postcomt <- read.csv("clean_data/Facebook/fb_telco_postcomments.csv")
+ig_postcomt <- read.csv("clean_data/Instagram/ig_telco_postcomments.csv")
+```
+
+## Comments' Common Words - General Sentiment Analysis from consumer; most common words toward brands -> brand perception
+## Comments' Common Words - Mood and Tone -> categorized into positive and negative sentiment
+## Lexicon dictionary - Pie Chart, by brand
+## Tf-Idf - table with graphs
+
+
+```{r}
+fb_comments_tokens <- fb_comments %>%
+  unnest_tokens(word, comment_content)
+```
+
+```{r}
+ig_comments_tokens <- ig_comments %>%
+  unnest_tokens(word, content)
+```
+
+
+# WordCloud Setting
+```{r}
+get_sentiments("bing")
+
+stopword <- get_stopwords(source = "snowball")
+
+colPalette <- c("#39A8AF", "#FECD03","#0060AE", "#0A8AD2", 
+                "#e82f89", "#9b0082","#ef2d1e", "#FF5500")
+
+```
+
+
+## Facebook Comment WordCloud
+```{r}
+
+fb_comments_tokens %>%
+  anti_join(stop_words) %>%
+  count(word) %>%
+  with(wordcloud(word, n, max.words = 300))
+
+#### --------------------------------------
+
+## Facebook Word Tokens Setup
+
+fb_comment_word <- fb_postcomt %>%
+  mutate(id = row_number()) %>%
+  select(id, brand, comment_content, username, likes, post_date, post_time_hr) %>%
+  unnest_tokens(output = word,
+                input = comment_content,
+                token = "words") %>%
+  anti_join(stopword, by = "word") %>%
+  filter(!str_detect(word, '^[[:digit:]]'))
+
+## General WordCloud
+fb_comment_word %>%
+  group_by(word) %>%
+  summarise(freq = n()) %>%
+  top_n(150) %>%
+  wordcloud2(color = rep_len(colPalette, nrow(fb_comment_word)),
+             size = 0.6,
+             shape = "circle")
+
+## Positive-Negative WordCloud
+fb_comment_word %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("#c30101", "lightgreen"),
+                   max.words = 150)
+
+## By Brand
+
+### Telstra
+fb_comment_word %>%
+  filter(brand == "Telstra") %>% 
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("#c30101", "lightgreen"),
+                   max.words = 150)
+
+### Optus
+fb_comment_word %>%
+  filter(brand == "Optus") %>% 
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("#c30101", "lightgreen"),
+                   max.words = 150)
+
+### Vodafone Australia
+fb_comment_word %>%
+  filter(brand == "Vodafone Australia") %>% 
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("#c30101", "lightgreen"),
+                   max.words = 150)
+
+### amaysim
+fb_comment_word %>%
+  filter(brand == "amaysim") %>% 
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("#c30101", "lightgreen"),
+                   max.words = 150)
+
+```
+
+
+## Instagram Comment WordCloud
+```{r}
+## General WordCloud
+ig_comment_word <- ig_postcomt %>%
+  mutate(id = row_number()) %>%
+  select(id, brand, comment_username, content, likes_number, date) %>%
+  unnest_tokens(output = word,
+                input = content,
+                token = "words") %>%
+  anti_join(stopword, by = "word") %>%
+  filter(!str_detect(word, '^[[:digit:]]'))
+
+
+## General WordCloud
+ig_comment_word %>%
+  group_by(word) %>%
+  summarise(freq = n()) %>%
+  top_n(150) %>%
+  wordcloud2(color = rep_len(colPalette, nrow(ig_comment_word)),
+             size = 0.6,
+             shape = "circle")
+
+
+## Positive-Negative WordCloud
+ig_comment_word %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("#c30101", "lightgreen"),
+                   max.words = 150)
+
+## By Brand
+### Telstra
+
+ig_comment_word %>%
+  filter(brand == "Telstra") %>% 
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("#c30101", "lightgreen"),
+                   max.words = 150)
+  
+### Optus
+
+ig_comment_word %>%
+  filter(brand == "Optus") %>% 
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("#c30101", "lightgreen"),
+                   max.words = 150)
+  
+### Vodafone Australia
+
+ig_comment_word %>%
+  filter(brand == "Vodafone AU") %>% 
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("#c30101", "lightgreen"),
+                   max.words = 150)
+  
+### amaysim
+
+ig_comment_word %>%
+  filter(brand == "amaysim") %>% 
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = T) %>%
+  reshape2::acast(word ~ sentiment, 
+                  value.var = "n",
+                  fill = 0) %>%
+  comparison.cloud(colors = c("#c30101", "lightgreen"),
+                   max.words = 150)
+```
+
+# Checking missing values
+```{r}
+md.pattern(fb_posts)
+md.pattern(fb_comments)
+md.pattern(ig_posts)
+md.pattern(fb_comments)
+```
