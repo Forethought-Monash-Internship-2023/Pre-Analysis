@@ -1,0 +1,173 @@
+---
+title: "Pre_Analysis_V1"
+author: "GUI GAO & Chatpisut Magic Makornkhan"
+date: "2023-08-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(tidytext)
+library(stringr)
+library(lubridate)
+library(ggplot2)
+```
+
+
+```{r}
+ig_posts <- read.csv("clean_data/Instagram/ig_telco_posts.csv")
+ig_comments <- read.csv("clean_data/Instagram/ig_telco_comments.csv")
+fb_posts <- read.csv("clean_data/Facebook/fb_telco_posts.csv")
+fb_comments <- read.csv("clean_data/Facebook/fb_telco_comments.csv")
+```
+
+# Analysis
+
+# ----------- Content Analysis --------------- 
+## Use wordcloud as the first step to get the idea of contents grouping
+## Use Principal Components to group types of contents for posts and comments in order to categorize them into meaningful groups
+## Find which groups related to other variables
+
+# ----------- Date Time Analysis --------------- 
+## Basic relationships of optimum and general date/time relationship with social media reactions
+
+# ----------- Findings --------------- 
+## Relationships of Date/Time to other variables and reactions
+## Relationships of word cloud to reactions
+## Search more on what client might want out of this
+## Machine Learning on variables across others
+## Brand auditing relative to time and their performance throughtout posts from past to recent
+## Comparison between brands
+
+## Basic Analysis Plan
+## 1. WordCloud - Gui
+## 2. Trends - Magic
+## 3. Post Time - Magic
+## 4. Post Date and Days - Gui
+
+## ------------- Trend Analysis -------------
+## ------------------ FB --------------------
+
+
+```{r trends-FB}
+## 2. Trends Analysis - Magic
+
+fb_posts_adjusted <- fb_posts %>% 
+  mutate(post_date = as.Date(post_date)) %>% 
+  filter(reactions < 5000,
+         shares < 300)
+```
+
+
+```{r trends2-FB}
+
+fb_trend_analysis <- ggplot(fb_posts_adjusted, aes(x = post_date)) +
+  #Reactions
+  geom_line(aes(y = reactions, color = brand), linetype = "solid") +
+  geom_point(aes(y = reactions, color = brand, shape = "reactions"), size = 2) +
+  geom_hline(yintercept = 100, linetype = "dashed", color = "black", linewidth = 0.7) +  # Add line to distinguish low interaction posts
+  #Comments
+  geom_line(aes(y = comments, color = brand), linetype = "longdash") +
+  geom_point(aes(y = comments, color = brand, shape = "comments"), size = 2) +
+  #Shares
+  geom_line(aes(y = shares, color = brand), linetype = "dotted") +
+  geom_point(aes(y = shares, color = brand, shape = "shares"), size = 2) +
+  labs(title = "Facebook Trend Analysis by Brand",
+       x = "Date Post",
+       y = "Magnitude") +
+  scale_color_manual(values = c("Telstra" = "purple", "Optus" = "blue", "Vodafone Australia" = "red", "amaysim" = "orange")) +
+  facet_wrap(~brand, ncol = 1, scales = "free_y") + # Use scales = "free_y" to make y-axis flexible
+  theme_minimal()
+
+```
+
+
+## -------------- IG -----------------
+
+
+```{r trends-IG}
+
+ig_posts <- ig_posts %>%
+  mutate(numbers = as.numeric(gsub(",", "", numbers)))
+
+ig_posts_low5k <- ig_posts %>% 
+  mutate(post_date = as.Date(post_date)) %>%
+  filter(numbers <= 5000)
+  
+ig_posts_high5k <- ig_posts %>% 
+  mutate(post_date = as.Date(post_date)) %>% 
+  filter(numbers > 5000)
+
+```
+
+```{r trends2-IG}
+ig_low_trend_analysis <- ggplot(ig_posts_low5k, aes(x = post_date)) +
+  geom_line(aes(y = numbers, color = brand, linetype = interactions)) +
+  geom_point(aes(y = numbers, color = brand, shape = interactions), size = 3) +
+  geom_hline(yintercept = 100, linetype = "dashed", color = "black", linewidth = 0.7) +  # Add line to distinguish low interaction posts
+  labs(title = "Instagram (Low Interactions Post) Trend Analysis by Brand",
+       x = "Date Post",
+       y = "Magnitutde") +
+  scale_color_manual(values = c("Telstra" = "purple", "Optus" = "blue", "Vodafone Australia" = "red", "amaysim" = "orange")) +
+  scale_linetype_manual(values = c("likes" = "solid", "views" = "dashed")) +
+  scale_shape_manual(values = c("likes" = 16, "views" = 17)) +
+  facet_wrap(~brand, ncol = 1, scales = "free_y") +  # Use scales = "free_y" to make y-axis flexible
+  theme_minimal()
+
+ig_high_trend_analysis <- ggplot(ig_posts_high5k, aes(x = post_date)) +
+  geom_line(aes(y = numbers, color = brand, linetype = interactions)) +
+  geom_point(aes(y = numbers, color = brand, shape = interactions), size = 3) +
+  labs(title = "Instagram (High Interactions Post) Trend Analysis by Brand",
+       x = "Date Post",
+       y = "Magnitutde") +
+  scale_color_manual(values = c("Telstra" = "purple", "Optus" = "blue", "Vodafone Australia" = "red", "amaysim" = "orange")) +
+  scale_linetype_manual(values = c("likes" = "solid", "views" = "dashed")) +
+  scale_shape_manual(values = c("likes" = 16, "views" = 17)) +
+  facet_wrap(~brand, ncol = 1, scales = "free_y") +  # Use scales = "free_y" to make y-axis flexible
+  theme_minimal()
+```
+
+
+## ------------- Post Time Analysis -------------
+## ------------------ FB --------------------
+
+```{r}
+fb_posts$post_time <- as_hms(strptime(fb_posts$post_time, "%H:%M"))
+
+fb_posttime_analysis <- ggplot(fb_posts, aes(x = post_time)) +
+  #Reactions
+  geom_line(aes(y = reactions, color = brand), linetype = "solid") +
+  geom_point(aes(y = reactions, color = brand, shape = "reactions"), size = 2) +
+  geom_hline(yintercept = 100, linetype = "dashed", color = "black", linewidth = 0.7) +  # Add line to distinguish low interaction posts
+  #Comments
+  geom_line(aes(y = comments, color = brand), linetype = "longdash") +
+  geom_point(aes(y = comments, color = brand, shape = "comments"), size = 2) +
+  #Shares
+  geom_line(aes(y = shares, color = brand), linetype = "dotted") +
+  geom_point(aes(y = shares, color = brand, shape = "shares"), size = 2) +
+  labs(title = "Facebook Trend Analysis by Brand",
+       x = "Date Post",
+       y = "Magnitude") +
+  scale_color_manual(values = c("Telstra" = "purple", "Optus" = "blue", "Vodafone Australia" = "red", "amaysim" = "orange")) +
+  facet_wrap(~brand, ncol = 1, scales = "free_y") + # Use scales = "free_y" to make y-axis flexible
+  theme_minimal()
+
+## Limitations: All of these are not measured within a time limit as benchmark checking, but from the post date up to July 2023 - meaning that magnitude of interactions might not be pertaining solely on post_time at this point.
+```
+
+
+```{r}
+fb_trend_analysis
+ig_low_trend_analysis
+ig_high_trend_analysis
+fb_posttime_analysis
+```
+
+
+
