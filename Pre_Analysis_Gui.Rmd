@@ -19,6 +19,14 @@ library(lubridate)
 library(wordcloud2)
 library(RColorBrewer)
 library(tidytext)
+library(patchwork)
+library(janitor)
+library(rsample)
+library(tidymodels)
+library(caret)
+library(ranger)
+library(gbm)
+library(xgboost)
 ```
 
 
@@ -99,6 +107,9 @@ IG_postcomt <- IG_postcomt %>%
 
 ```{r}
 stopword <- get_stopwords(source = "snowball")
+
+IG_postcomt <- IG_postcomt %>%
+  mutate(post_caption = gsub('[^a-zA-Z|[:blank:]]', "", post_caption))
 
 IG_post_word <- IG_postcomt %>%
   mutate(id = row_number()) %>%
@@ -408,6 +419,50 @@ IG_com_word %>%
            r0 = 0.82)
 ```
 
+### network
+```{r}
+IG_com_bigrams <- IG_Telco_posts_clean %>%
+  inner_join(IG_Telco_comments_clean, by = "post_url") %>%
+  mutate(id = row_number()) %>%
+  select(id, brand, content, date) %>%
+  mutate(content = gsub('[^a-zA-Z|[:blank:]]', "", content)) %>%
+  unnest_tokens(output = bigram,
+                input = content,
+                token = "ngrams",
+                n = 2) %>%
+  filter(!is.na(bigram)) %>%
+  separate(bigram, c("word1", "word2"),
+           sep = " ") %>%
+  filter(!word1 %in% stopword$word) %>%
+  filter(!word2 %in% stopword$word) %>%
+  count(word1, word2, sort = T)
+  
+```
+
+
+```{r}
+library(tidygraph)
+library(ggraph)
+IG_bigram_graph <- IG_com_bigrams %>%
+  top_n(60) %>%
+  graph_from_data_frame()
+IG_bigram_graph
+```
+
+
+```{r}
+set.seed(2017)
+ggraph(IG_bigram_graph, layout = "fr") +
+  geom_edge_link() +
+  geom_edge_density(aes(fill = n)) +
+  geom_node_point(color = "purple1", size = 1.2) +
+  geom_node_text(aes(label = name),  repel = TRUE) +
+  theme_void() + theme(legend.position = "none",
+                       plot.title = element_text(hjust = 0.5)) +
+  ggtitle("Bigram Network")
+```
+
+
 ### tf-idf table-Need
 ```{r}
 IG_com_word %>%
@@ -417,18 +472,15 @@ IG_com_word %>%
   bind_tf_idf(term = word,
               document = brand,
               n = n) %>%
-  mutate(tf_idf = tf_idf * 100) %>%
   arrange(desc(tf_idf)) %>%
-  filter(tf_idf >= 1)
+  filter(tf_idf >= 0.01) %>%
+  mutate_at(vars(tf, idf, tf_idf), funs(round(., 5)))
+
+round(dt[4:6], 4)
 # High value means that word has a high frequency within a document but is quite rare over all documents. If a word occurs in a lot of documents idf will be close to zero, so `tf_idf` value will be small.
 ```
 
-### PCA for tf-idf--Need
-```{r}
 
-```
-
- 
 # ----------- Content Analysis --------------- 
 ## Use wordcloud as the first step to get the idea of contents grouping
 ## Use Principal Components to group types of contents for posts and comments in order to categorize them into meaningful groups
@@ -446,4 +498,77 @@ IG_com_word %>%
 ## Comparison between brands
 
 
+## Try to use LDA to extract the themes of texts -- no working
+```{r}
+library(rtweet)
+library(httr)
+library(dplyr)
+#library(qdap)
+library(qdapRegex)
+library(tm)
+```
+
+```{r}
+test <- IG_Telco_posts_clean %>%
+  select(post_caption) %>%
+  mutate(post_caption = gsub("[^A-Za-z]", " ", post_caption))
+```
+
+```{r}
+# create a corpus (transform tweets into documents)
+corpus <- test %>%
+  VectorSource() %>%
+  Corpus()
+
+# remove stop words, extra whitespace and transform to lower case
+no_stop <- tm_map(corpus, removeWords, stopwords("english"))
+lower <- tm_map(no_stop, tolower)
+docs <- tm_map(lower, stripWhitespace)
+
+# create a DTM
+dtm <- DocumentTermMatrix(docs)
+```
+
+```{r}
+# sum word counts in each document
+row_terms <- apply(dtm , 1, sum)
+
+# keep rows where sum is > 0
+tweet_dtm <- dtm[row_terms > 0, ]
+```
+
+```{r}
+# the lda function is within the topicmodels package
+library(topicmodels)
+
+lda3 <- LDA(tweet_dtm, 3)
+
+# and check the results
+terms_lda3 <- terms(lda3, 15)
+terms_lda3
+```
+
+```{r}
+lda_gibbs <- LDA(tweet_dtm, 
+                 k = 3,
+                 method = "Gibbs",
+                 control = list(seed = 2)) %>%
+  tidytext::tidy(matrix = "beta")
+
+word_probs <- lda_gibbs %>%
+  group_by(topic) %>%
+  top_n(20, beta) %>%
+  ungroup() %>%
+  mutate(term_n = fct_reorder(term, beta))
+
+ggplot(word_probs,
+       aes(term_n,
+           beta,
+           fill = as.factor(topic)
+           )
+       ) +
+geom_col(show.legend = FALSE) +
+         coord_flip() +
+         facet_wrap(~ topic, scales = "free")
+```
 
