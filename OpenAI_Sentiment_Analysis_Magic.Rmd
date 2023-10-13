@@ -156,8 +156,7 @@ Optus_sample_comments <- ig_postcomt %>%
             )
       ),
     max_tokens = 300,  # You can adjust the number of tokens generated # 500
-    temperature = 0,
-    openai_api_key = "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"
+    temperature = 0
   )
 
   # responses[[i]] <- response
@@ -208,8 +207,7 @@ comment_to_analyze <- Optus_sample_comments$content[i]
             )
       ),
     max_tokens = 60,  # You can adjust the number of tokens generated # 500
-    temperature = 0,
-    openai_api_key = "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"
+    temperature = 0
   )
 
   responses <- rbind(responses, data.frame(original_comment = comment_to_analyze, model_response = response$choices$message.content))
@@ -293,8 +291,7 @@ amaysim_ig_posts <- ig_postcomt %>%
             )
       ),
     max_tokens = 500,  # You can adjust the number of tokens generated # 500
-    temperature = 0,
-    openai_api_key = "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"
+    temperature = 0
   )
 
 
@@ -356,8 +353,7 @@ telstra_ig_post_analyze <- telstra_ig_posts$post_caption[i]
             )
       ),
     max_tokens = 150,  # You can adjust the number of tokens generated up to 500
-    temperature = 0,
-    openai_api_key = "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"
+    temperature = 0
   )
 
   telstra_ig_post_result <- rbind(telstra_ig_post_result, data.frame(original_comment = telstra_ig_post_analyze, model_response = telstra_ig_posts_response$choices$message.content))
@@ -399,8 +395,7 @@ telstra_ig_post_analyze <- telstra_ig_posts$post_caption[i]
             )
       ),
     max_tokens = 500,  # You can adjust the number of tokens generated # 500
-    temperature = 0,
-    openai_api_key = "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"
+    temperature = 0
   )
 
 
@@ -460,8 +455,7 @@ optus_ig_post_analyze <- optus_ig_posts$post_caption[i]
             )
       ),
     max_tokens = 150,  # You can adjust the number of tokens generated up to 500
-    temperature = 0,
-    openai_api_key = "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"
+    temperature = 0
   )
 
   optus_ig_post_result <- rbind(optus_ig_post_result, data.frame(original_comment = optus_ig_post_analyze, model_response = optus_ig_posts_response$choices$message.content))
@@ -502,8 +496,7 @@ optus_ig_post_analyze <- optus_ig_posts$post_caption[i]
             )
       ),
     max_tokens = 500,  # You can adjust the number of tokens generated # 500
-    temperature = 0,
-    openai_api_key = "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"
+    temperature = 0
   )
 
 
@@ -559,8 +552,7 @@ vodafoneAU_ig_post_analyze <- vodafoneAU_ig_posts$post_caption[i]
             )
       ),
     max_tokens = 150,  # You can adjust the number of tokens generated up to 500
-    temperature = 0,
-    openai_api_key = "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"
+    temperature = 0
   )
 
   vodafoneAU_ig_post_result <- rbind(vodafoneAU_ig_post_result, data.frame(original_comment = vodafoneAU_ig_post_analyze, model_response = vodafoneAU_ig_posts_response$choices$message.content))
@@ -603,8 +595,7 @@ vodafoneAU_ig_post_analyze <- vodafoneAU_ig_posts$post_caption[i]
             )
       ),
     max_tokens = 500,  # You can adjust the number of tokens generated # 500
-    temperature = 0,
-    openai_api_key = "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"
+    temperature = 0
   )
 
 
@@ -663,8 +654,7 @@ amaysim_ig_post_analyze <- amaysim_ig_posts$post_caption[i]
             )
       ),
     max_tokens = 150,  # You can adjust the number of tokens generated up to 500
-    temperature = 0,
-    openai_api_key = "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"
+    temperature = 0
   )
 
   amaysim_ig_post_result <- rbind(amaysim_ig_post_result, data.frame(original_comment = amaysim_ig_post_analyze, model_response = amaysim_ig_posts_response$choices$message.content))
