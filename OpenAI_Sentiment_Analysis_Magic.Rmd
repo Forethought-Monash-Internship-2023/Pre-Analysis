@@ -1,0 +1,843 @@
+---
+title: "OpenAI_Sentiment_Analysis_Magic"
+author: "Chatpisut Makornkhan"
+date: "2023-09-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(tidytext)
+library(stringr)
+library(lubridate)
+library(ggplot2)
+library(wordcloud)
+library(wordcloud2)
+library(reshape2)
+library(mice)
+library(openai)
+library(openxlsx)
+```
+
+
+```{r}
+ig_posts <- read.csv("clean_data/Instagram/ig_telco_posts.csv")
+ig_comments <- read.csv("clean_data/Instagram/ig_telco_comments.csv")
+fb_posts <- read.csv("clean_data/Facebook/fb_telco_posts.csv")
+fb_comments <- read.csv("clean_data/Facebook/fb_telco_comments.csv")
+fb_postcomt <- read.csv("clean_data/Facebook/fb_telco_postcomments.csv")
+ig_postcomt <- read.csv("clean_data/Instagram/ig_telco_postcomments.csv")
+```
+
+
+# Checking missing values
+```{r}
+md.pattern(fb_posts)
+md.pattern(fb_comments)
+md.pattern(ig_posts)
+md.pattern(fb_comments)
+```
+
+
+# Test Data
+```{r}
+# test_ig_comments <- ig_comments [1:40, ] %>% 
+#   select("content")
+
+Optus_sample_comments <- ig_postcomt %>% 
+  filter(brand == "Optus") %>% 
+  select(c("content")) %>% 
+  na.omit() %>% 
+  head(20)
+
+## Make sure to filter nice clean comments (50 words or more)
+```
+
+
+## ------------------------------------------------------------------------------------
+
+## Themes generating options
+## 1. Let openAI generate on its own
+## 2. Set some parameters or drivers (like 3, network, service, brand, other etc.)
+## 3. Prompt GPT to classify these into parameter categories
+## 4. Don't forget that parameters can be positives or negatives
+## 5. Try to find themes based on further classification of that.
+
+## Classify comment lengths
+
+## OpenAI chat completion function
+```{r eval = false}
+# create_chat_completion(
+#   model,
+#   messages = NULL,
+#   temperature = 1,
+#   top_p = 1,
+#   n = 1,
+#   stream = FALSE,
+#   stop = NULL,
+#   max_tokens = NULL,
+#   presence_penalty = 0,
+#   frequency_penalty = 0,
+#   logit_bias = NULL,
+#   user = NULL,
+#   openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+#   openai_organization = NULL
+# )
+```
+
+
+# Prompt would go in the content after role=system, and your comments or posts would go in content after role="user"
+# If you try it with the code as is first, you can explore what the output object looks like, the response from the model is stored in message.content
+
+#openAI Testing Code
+```{r}
+# output_ig_comments <- create_chat_completion(
+#   model = "gpt-3.5-turbo",
+#   messages = list(
+#     list(
+#       "role" = "system",
+#       "content" = "You are a helpful assistant."
+#     ),
+#     list(
+#       "role" = "user",
+#       "content" = "Who won the world series in 2020?"
+#     ),
+#     list(
+#       "role" = "assistant",
+#       "content" = "The Los Angeles Dodgers won the World Series in 2020."
+#     ),
+#     list(
+#       "role" = "user",
+#       "content" = "Where was it played?"
+#     )
+#   )
+# )
+```
+
+
+# Grouping Comments - Test
+```{r}
+
+# responses <- list()
+
+# Loop through each row in the DataFrame
+# for (i in 1:nrow(Optus_sample_comments)) {}
+  # Extract comment from the 'comment' column
+  # comment_to_analyze <- Optus_sample_comments$content[i]
+  
+  comment_to_analyze <- paste(Optus_sample_comments$content, collapse = "\t")
+  
+  print(comment_to_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a set of comments, separated by tabs, about reactions and thoughts toward a telecommuniation brand.
+  Some are regarding engagements or praises, and some are related to complaints or dissatisfaction toward a brand.
+  Please analyse the comments and return up to 5 mutually exclusive themes that summarise content.
+  Please provide a theme title, description of the theme and 1 example comment that relates to that theme.
+  If there is insufficient information to provide a title, description of the theme and an example, you can return less than 5 themes."
+  
+
+  # Call the completion API
+  response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = comment_to_analyze
+            )
+      ),
+    max_tokens = 300,  # You can adjust the number of tokens generated # 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+  # responses[[i]] <- response
+ 
+```
+
+
+```{r}
+print(response$choices$message.content)
+```
+
+# Tagging Comments - Test
+```{r}
+
+responses <- data.frame(original_comment = character(0), model_response = character(0))
+
+# Loop through each row in the DataFrame
+for (i in 1:nrow(Optus_sample_comments)) {
+# Extract comment from the 'comment' column
+comment_to_analyze <- Optus_sample_comments$content[i]
+  
+  print(comment_to_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a comment on a post by a telecommuniation brand.
+  The system should assign an index to a set of columns corresponding to the topic categories below, effectively indicating the degree of each category's relevance to the comment.
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance.
+  
+  These are the topics:
+
+  1. Good customer services 
+  2. Good network coverage
+  
+  "
+  
+
+  # Call the completion API
+  response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = comment_to_analyze
+            )
+      ),
+    max_tokens = 60,  # You can adjust the number of tokens generated # 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+  responses <- rbind(responses, data.frame(original_comment = comment_to_analyze, model_response = response$choices$message.content))
+  
+}  
+  
+  print(responses)
+
+```
+
+
+##----------------------------------------------------------------------
+
+
+# IG Post Grouping - Data Preparation
+```{r}
+
+## Telstra
+
+telstra_ig_posts <- ig_postcomt %>% 
+  filter(brand == "Telstra") %>% 
+  select(c("post_caption")) %>% 
+  na.omit() %>% 
+  unique()
+
+## Optus
+
+optus_ig_posts <- ig_postcomt %>% 
+  filter(brand == "Optus") %>% 
+  select(c("post_caption")) %>% 
+  na.omit() %>% 
+  unique() %>% 
+  head(45)
+
+## Vodafone Australia
+
+vodafoneAU_ig_posts <- ig_postcomt %>% 
+  filter(brand == "Vodafone AU") %>% 
+  select(c("post_caption")) %>% 
+  na.omit() %>% 
+  unique()
+
+## Amaysim
+
+amaysim_ig_posts <- ig_postcomt %>% 
+  filter(brand == "amaysim") %>% 
+  select(c("post_caption")) %>% 
+  na.omit() %>% 
+  unique() %>% 
+  head(100)
+
+## Make sure to filter nice clean comments (50 words or more)
+```
+
+
+## IG Post Grouping - Telstra
+```{r}
+  
+  telstra_ig_post_analyze <- paste(telstra_ig_posts$post_caption, collapse = "\t")
+  
+  print(telstra_ig_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a set of posts, separated by tabs, about reactions and thoughts toward a telecommuniation brand - Telstra.
+  Please analyse the posts and return up to 5 mutually exclusive themes that summarise content.
+  Please provide a theme title, description of the theme and 1 example post that relates to that theme.
+  If there is insufficient information to provide a title, description of the theme and an example, you can return less than 5 themes."
+  
+
+  # Call the completion API
+  telstra_ig_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = telstra_ig_post_analyze
+            )
+      ),
+    max_tokens = 500,  # You can adjust the number of tokens generated # 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+
+```
+
+```{r}
+print(telstra_ig_posts_response$choices$message.content)
+```
+
+
+## IG Post Tagging - Telstra
+```{r}
+
+telstra_ig_post_result <- data.frame(original_comment = character(0), model_response = character(0))
+
+# Loop through each row in the DataFrame
+for (i in 1:nrow(telstra_ig_posts)) {
+# Extract comment from the 'comment' column
+telstra_ig_post_analyze <- telstra_ig_posts$post_caption[i]
+  
+  print(telstra_ig_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a post by a telecommuniation brand - Telstra.
+  The system should assign an index to a set of columns corresponding to the theme categories below, effectively indicating the degree of each category's relevance to the post.
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance.
+  
+  These are the themes:
+
+  Theme 1: Nostalgia and Pop Culture
+  Description: posts related to nostalgic moments, references to past trends or events, and mentions of popular culture.
+
+  Theme 2: Connectivity and Communication
+  Description: posts related to the importance of staying connected, making calls, and the role of telecommunication in communication.
+
+  Theme 3: Partnerships and Collaborations
+  Description: posts related to partnerships and collaborations with other brands or organizations.
+
+  Theme 4: Customer Service and Support
+  Description: posts related to customer service experiences, support provided by the brand, and addressing customer needs.
+
+  Theme 5: Product Updates and Releases
+  Description: posts related to new products, updates, and releases from the brand.
+  
+  "
+  
+
+  # Call the completion API
+  telstra_ig_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = telstra_ig_post_analyze
+            )
+      ),
+    max_tokens = 150,  # You can adjust the number of tokens generated up to 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+  telstra_ig_post_result <- rbind(telstra_ig_post_result, data.frame(original_comment = telstra_ig_post_analyze, model_response = telstra_ig_posts_response$choices$message.content))
+  
+}  
+  
+  print(telstra_ig_post_result)
+
+```
+
+
+-------------------------------------------------------
+
+## IG Post Grouping - Optus
+```{r}
+  
+  optus_ig_post_analyze <- paste(optus_ig_posts$post_caption, collapse = "\t")
+  
+  print(optus_ig_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a set of posts, separated by tabs, about reactions and thoughts toward a telecommuniation brand - Optus.
+  Please analyse the posts and return up to 4 mutually exclusive themes that summarise content.
+  Please provide a theme title, description of the theme and 1 example post that relates to that theme.
+  If there is insufficient information to provide a title, description of the theme and an example, you can return less than 5 themes."
+  
+
+  # Call the completion API
+  optus_ig_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = optus_ig_post_analyze
+            )
+      ),
+    max_tokens = 500,  # You can adjust the number of tokens generated # 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+
+```
+
+```{r}
+print(optus_ig_posts_response$choices$message.content)
+```
+
+
+# IG Post Tagging - Optus
+```{r}
+
+optus_ig_post_result <- data.frame(original_comment = character(0), model_response = character(0))
+
+# Loop through each row in the DataFrame
+for (i in 1:nrow(optus_ig_posts)) {
+# Extract comment from the 'comment' column
+optus_ig_post_analyze <- optus_ig_posts$post_caption[i]
+  
+  print(optus_ig_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a post by a telecommuniation brand - Optus.
+  The system should assign an index to a set of columns corresponding to the theme categories below, effectively indicating the degree of each category's relevance to the post.
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance.
+  
+  These are the themes:
+
+  Theme 1: Support for Ambassadors and Athletes
+  Description: This theme focuses on posts that express support and well wishes for Optus ambassadors and athletes, particularly ahead of important events or competitions.
+  
+  Theme 2: Pride and LGBTQIA+ Support
+  Description: This theme revolves around posts that celebrate diversity, inclusion, and support for the LGBTQIA+ community, particularly during events like Sydney WorldPride.
+
+  Theme 3: Partnership and Community Engagement
+  Description: This theme highlights posts that showcase Optus' partnerships with various organizations and their involvement in community events and initiatives.
+
+  Theme 4: Product and Service Promotions
+  Description: This theme focuses on posts that promote Optus' products and services, such as new phone models or special offers.
+
+  
+  "
+  
+
+  # Call the completion API
+  optus_ig_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = optus_ig_post_analyze
+            )
+      ),
+    max_tokens = 150,  # You can adjust the number of tokens generated up to 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+  optus_ig_post_result <- rbind(optus_ig_post_result, data.frame(original_comment = optus_ig_post_analyze, model_response = optus_ig_posts_response$choices$message.content))
+  
+}  
+  
+  print(optus_ig_post_result)
+
+```
+
+----------------------------------------------------
+
+## IG Post Grouping - Vodafone AU
+```{r}
+  
+  vodafoneAU_ig_post_analyze <- paste(vodafoneAU_ig_posts$post_caption, collapse = "\t")
+  
+  print(vodafoneAU_ig_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a set of posts, separated by tabs, about reactions and thoughts toward a telecommuniation brand - Vodafone AU.
+  Please analyse the posts and return up to 3 mutually exclusive themes that summarise content.
+  Please provide a theme title, description of the theme and 1 example post that relates to that theme.
+  If there is insufficient information to provide a title, description of the theme and an example, you can return less than 5 themes."
+  
+
+  # Call the completion API
+  vodafoneAU_ig_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = vodafoneAU_ig_post_analyze
+            )
+      ),
+    max_tokens = 500,  # You can adjust the number of tokens generated # 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+
+```
+
+```{r}
+print(vodafoneAU_ig_posts_response$choices$message.content)
+```
+
+
+# IG Post Tagging - Vodafone AU
+```{r}
+
+vodafoneAU_ig_post_result <- data.frame(original_comment = character(0), model_response = character(0))
+
+# Loop through each row in the DataFrame
+for (i in 1:nrow(vodafoneAU_ig_posts)) {
+# Extract comment from the 'comment' column
+vodafoneAU_ig_post_analyze <- vodafoneAU_ig_posts$post_caption[i]
+  
+  print(vodafoneAU_ig_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a post by a telecommuniation brand - Vodafone AU.
+  The system should assign an index to a set of columns corresponding to the theme categories below, effectively indicating the degree of each category's relevance to the post.
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance.
+  
+  These are the themes:
+
+  Theme 1: Exclusive Access and Privileges
+  Description: This theme revolves around Vodafone offering exclusive pre-sale access to concerts and events for their customers. It highlights limited availability and encourages customers to act fast to secure their spot.
+
+  Theme 2: Vodafone Ticket - VIP Experiences and Exclusive Invites
+  Description: This theme focuses on Vodafone Ticket, which offers customers pre-sales, VIP experiences, and exclusive invites to see the biggest artists touring Australia. It highlights the benefits of being a Vodafone customer and provides a link for more information.
+  
+  Theme 3: Vodafone's 5G Network Rollout
+  Description: This theme highlights the rollout of Vodafone's 5G network across Australia. It emphasizes the coverage in selected areas of major cities and the requirement of a 5G approved device. It also includes promotions and competitions related to the 5G network.
+
+  "
+  
+
+  # Call the completion API
+  vodafoneAU_ig_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = vodafoneAU_ig_post_analyze
+            )
+      ),
+    max_tokens = 150,  # You can adjust the number of tokens generated up to 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+  vodafoneAU_ig_post_result <- rbind(vodafoneAU_ig_post_result, data.frame(original_comment = vodafoneAU_ig_post_analyze, model_response = vodafoneAU_ig_posts_response$choices$message.content))
+  
+}  
+  
+  print(vodafoneAU_ig_post_result)
+
+```
+
+
+--------------------------------------------------------
+
+
+## IG Post Grouping - Amaysim
+```{r}
+  
+  amaysim_ig_post_analyze <- paste(amaysim_ig_posts$post_caption, collapse = "\t")
+  
+  print(amaysim_ig_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a set of posts, separated by tabs, about reactions and thoughts toward a telecommuniation brand - Amaysim.
+  Please analyse the posts and return up to 4 mutually exclusive themes that summarise content.
+  Please provide a theme title, description of the theme and 1 example post that relates to that theme.
+  If there is insufficient information to provide a title, description of the theme and an example, you can return less than 5 themes."
+  
+
+  # Call the completion API
+  amaysim_ig_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = amaysim_ig_post_analyze
+            )
+      ),
+    max_tokens = 500,  # You can adjust the number of tokens generated # 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+
+```
+
+```{r}
+print(amaysim_ig_posts_response$choices$message.content)
+```
+
+
+# IG Post Tagging - Amaysim
+```{r}
+
+amaysim_ig_post_result <- data.frame(original_comment = character(0), model_response = character(0))
+
+# Loop through each row in the DataFrame
+for (i in 1:nrow(amaysim_ig_posts)) {
+# Extract comment from the 'comment' column
+amaysim_ig_post_analyze <- amaysim_ig_posts$post_caption[i]
+  
+  print(amaysim_ig_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a post by a telecommuniation brand - Amaysim.
+  The system should assign an index to a set of columns corresponding to the theme categories below, effectively indicating the degree of each category's relevance to the post.
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance.
+  
+  These are the themes:
+
+  Theme 1: Customer Appreciation and Loyalty
+  Description: This theme includes posts that express gratitude towards customers and highlight their loyalty to the brand.
+
+  Theme 2: Product and Service Updates
+  Description: This theme includes posts that announce new products, services, or features offered by Amaysim.
+  
+  Theme 3: Promotions and Competitions
+  Description: This theme includes posts that promote special offers, discounts, and competitions run by Amaysim.
+
+  Theme 4: Social Responsibility and Support
+  Description: This theme includes posts that highlight Amaysim's efforts to support various causes and provide assistance during challenging times.
+  
+  "
+  
+
+  # Call the completion API
+  amaysim_ig_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = amaysim_ig_post_analyze
+            )
+      ),
+    max_tokens = 150,  # You can adjust the number of tokens generated up to 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+  amaysim_ig_post_result <- rbind(amaysim_ig_post_result, data.frame(original_comment = amaysim_ig_post_analyze, model_response = amaysim_ig_posts_response$choices$message.content))
+  
+}  
+  
+  print(amaysim_ig_post_result)
+
+```
+
+## ------------------------------
+
+# Facebook Post Grouping - Data Preparation
+```{r}
+
+## Telstra
+
+telstra_fb_posts <- fb_postcomt %>% 
+  filter(brand == "Telstra") %>% 
+  select(c("content")) %>% 
+  na.omit() %>% 
+  unique()
+
+## Optus
+
+optus_fb_posts <- fb_postcomt %>% 
+  filter(brand == "Optus") %>% 
+  select(c("content")) %>% 
+  na.omit() %>% 
+  unique() # %>% 
+  # filter(str_length(content) >= 20)
+
+## Vodafone Australia
+
+vodafoneAU_fb_posts <- fb_postcomt %>% 
+  filter(brand == "Vodafone Australia") %>% 
+  select(c("content")) %>% 
+  na.omit() %>% 
+  unique()
+
+## Amaysim
+
+amaysim_fb_posts <- fb_postcomt %>% 
+  filter(brand == "amaysim") %>% 
+  select(c("content")) %>% 
+  na.omit() %>% 
+  unique() %>%
+  filter(str_length(content) >= 20)
+
+## Make sure to filter nice clean comments (50 words or more for comments)
+```
+
+
+## FB Post Grouping - Telstra
+```{r}
+  
+  telstra_fb_post_analyze <- paste(telstra_fb_posts$content, collapse = "\t")
+  
+  print(telstra_fb_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a set of posts, separated by tabs, about reactions and thoughts toward a telecommuniation brand - Telstra.
+  Please analyse the posts and return up to 4 mutually exclusive themes that summarise content.
+  Please provide a theme title, description of the theme and 1 example post that relates to that theme.
+  If there is insufficient information to provide a title, description of the theme and an example, you can return less than 4 themes."
+  
+
+  # Call the completion API
+  telstra_fb_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = telstra_fb_post_analyze
+            )
+      ),
+    max_tokens = 500,  # You can adjust the number of tokens generated # 500
+    temperature = 0,
+    openai_api_key = "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"
+  )
+
+
+```
+
+```{r}
+print(telstra_fb_posts_response$choices$message.content)
+```
+
+
+
+## Export Excel
+
+```{r}
+
+write.xlsx(telstra_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/sentiment_result_data/Instagram/telstra_ig_post_result.xlsx', rowNames=FALSE)
+
+write.xlsx(optus_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/sentiment_result_data/Instagram/optus_ig_post_result.xlsx', rowNames=FALSE)
+
+write.xlsx(vodafoneAU_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/sentiment_result_data/Instagram/vodafoneAU_ig_post_result.xlsx', rowNames=FALSE)
+
+write.xlsx(amaysim_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/sentiment_result_data/Instagram/amaysim_ig_post_result.xlsx', rowNames=FALSE)
+
+```
+
+
+## -----------------------------
+
+## Analysis
+
+## Load back themes data
+
+```{r}
+telstra_ig_post_analysis <- read.xlsx("sentiment_result_data/Instagram/telstra_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+
+optus_ig_post_analysis <- read.xlsx("sentiment_result_data/Instagram/optus_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+
+vodafoneAU_ig_post_analysis <- read.xlsx("sentiment_result_data/Instagram/vodafoneAU_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+
+amaysim_ig_post_analysis <- read.xlsx("sentiment_result_data/Instagram/amaysim_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+```
+
+## Wrangling Numerical Value
+
+```{r}
+
+```
+
+## Join back
+```{r}
+telstra_ig_post_analysis_result <- left_join(telstra_ig_post_analysis, ig_posts, by = c("post_caption" = "post_caption")) %>%
+  filter(str_length(post_caption) >= 20) %>% 
+  select(c(post_caption, model_response, numbers, interactions))
+
+telstra_ig_post_analysis_result$numbers <- as.numeric(gsub(",", "", telstra_ig_post_analysis_result$numbers))
+
+telstra_ig_post_analysis_result <- telstra_ig_post_analysis_result[order(-telstra_ig_post_analysis_result$numbers), ]
+
+## -------------------
+
+optus_ig_post_analysis_result <- left_join(optus_ig_post_analysis, ig_posts, by = c("post_caption" = "post_caption")) %>%
+  filter(str_length(post_caption) >= 20) %>% 
+  select(c(post_caption, model_response, numbers, interactions))
+
+optus_ig_post_analysis_result$numbers <- as.numeric(gsub(",", "", optus_ig_post_analysis_result$numbers)) 
+
+optus_ig_post_analysis_result <- optus_ig_post_analysis_result[order(-optus_ig_post_analysis_result$numbers), ]
+
+## -------------------
+
+vodafoneAU_ig_post_analysis_result <- left_join(vodafoneAU_ig_post_analysis, ig_posts, by = c("post_caption" = "post_caption")) %>%
+  filter(str_length(post_caption) >= 20) %>% 
+  select(c(post_caption, model_response, numbers, interactions))
+
+vodafoneAU_ig_post_analysis_result$numbers <- as.numeric(gsub(",", "", vodafoneAU_ig_post_analysis_result$numbers))
+
+vodafoneAU_ig_post_analysis_result <- vodafoneAU_ig_post_analysis_result[order(-vodafoneAU_ig_post_analysis_result$numbers), ]
+
+## -------------------
+
+amaysim_ig_post_analysis_result <- left_join(amaysim_ig_post_analysis, ig_posts, by = c("post_caption" = "post_caption")) %>%
+  filter(str_length(post_caption) >= 20) %>% 
+  select(c(post_caption, model_response, numbers, interactions))
+
+amaysim_ig_post_analysis_result$numbers <- as.numeric(gsub(",", "", amaysim_ig_post_analysis_result$numbers))
+
+amaysim_ig_post_analysis_result <- amaysim_ig_post_analysis_result[order(-amaysim_ig_post_analysis_result$numbers), ]
+
+```
+
+
+
+
