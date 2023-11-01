@@ -38,6 +38,6 @@ prompt_groups <- "You will be shown a set of comments, separated by tabs, about 
 ```{r}
 prompt_groups <- prompt_groups <- "You will be shown a comment toward a post by a telecommuniation brand - Optus.
   The system should assign an index to a set of columns corresponding to the theme categories below, effectively indicating the degree of each category's relevance to the post.
-    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance.
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance."
 ```
 
