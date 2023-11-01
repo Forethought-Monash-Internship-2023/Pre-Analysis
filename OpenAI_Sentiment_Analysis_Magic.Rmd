@@ -22,6 +22,7 @@ library(reshape2)
 library(mice)
 library(openai)
 library(openxlsx)
+library(kableExtra)
 ```
 
 
@@ -220,6 +221,7 @@ comment_to_analyze <- Optus_sample_comments$content[i]
 
 
 ##----------------------------------------------------------------------
+## Real Work
 
 
 # IG Post Grouping - Data Preparation
@@ -406,7 +408,7 @@ print(optus_ig_posts_response$choices$message.content)
 ```
 
 
-# IG Post Tagging - Optus
+## IG Post Tagging - Optus
 ```{r}
 
 optus_ig_post_result <- data.frame(original_comment = character(0), model_response = character(0))
@@ -507,7 +509,7 @@ print(vodafoneAU_ig_posts_response$choices$message.content)
 ```
 
 
-# IG Post Tagging - Vodafone AU
+## IG Post Tagging - Vodafone AU
 ```{r}
 
 vodafoneAU_ig_post_result <- data.frame(original_comment = character(0), model_response = character(0))
@@ -606,7 +608,7 @@ print(amaysim_ig_posts_response$choices$message.content)
 ```
 
 
-# IG Post Tagging - Amaysim
+## IG Post Tagging - Amaysim
 ```{r}
 
 amaysim_ig_post_result <- data.frame(original_comment = character(0), model_response = character(0))
@@ -684,7 +686,8 @@ optus_fb_posts <- fb_postcomt %>%
   filter(brand == "Optus") %>% 
   select(c("content")) %>% 
   na.omit() %>% 
-  unique() # %>% 
+  unique() %>% 
+  head(80)
   # filter(str_length(content) >= 20)
 
 ## Vodafone Australia
@@ -702,7 +705,8 @@ amaysim_fb_posts <- fb_postcomt %>%
   select(c("content")) %>% 
   na.omit() %>% 
   unique() %>%
-  filter(str_length(content) >= 20)
+  filter(str_length(content) >= 20) %>% 
+  head(100)
 
 ## Make sure to filter nice clean comments (50 words or more for comments)
 ```
@@ -737,7 +741,6 @@ amaysim_fb_posts <- fb_postcomt %>%
       ),
     max_tokens = 500,  # You can adjust the number of tokens generated # 500
     temperature = 0,
-    openai_api_key = "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"
   )
 
 
@@ -747,19 +750,286 @@ amaysim_fb_posts <- fb_postcomt %>%
 print(telstra_fb_posts_response$choices$message.content)
 ```
 
+## FB Post Tagging - Telstra
+```{r}
 
+telstra_fb_post_result <- data.frame(original_comment = character(0), model_response = character(0))
+
+# Loop through each row in the DataFrame
+for (i in 1:nrow(telstra_fb_posts)) {
+# Extract comment from the 'comment' column
+telstra_fb_post_analyze <- telstra_fb_posts$content[i]
+  
+  print(telstra_fb_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a post by a telecommuniation brand - Telstra.
+  The system should assign an index to a set of columns corresponding to the theme categories below, effectively indicating the degree of each category's relevance to the post.
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance.
+  
+  These are the themes:
+
+  Theme 1: Technical Issues and Resolutions
+  Description: This theme revolves around posts discussing technical issues faced by Telstra customers and the subsequent resolutions provided by the brand.
+
+  Theme 2: Product and Service Updates
+  Description: This theme includes posts that inform customers about new products, services, or updates offered by Telstra.
+
+  Theme 3: Data Breach and Privacy Concerns
+  Description: This theme focuses on posts related to data breaches and privacy concerns involving Telstra customer details.
+
+  Theme 4: Customer Support and Assistance
+  Description: This theme encompasses posts where Telstra offers support and assistance to its customers, such as helping them secure passwords or providing updates on service disruptions.
+  
+  "
+  
+
+  # Call the completion API
+  telstra_fb_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = telstra_fb_post_analyze
+            )
+      ),
+    max_tokens = 150,  # You can adjust the number of tokens generated up to 500
+    temperature = 0
+  )
+
+  telstra_fb_post_result <- rbind(telstra_fb_post_result, data.frame(original_comment = telstra_fb_post_analyze, model_response = telstra_fb_posts_response$choices$message.content))
+  
+}  
+  
+  print(telstra_fb_post_result)
+
+```
+
+
+
+## FB Post Grouping - Vodafone AU
+```{r}
+  
+  vodafoneAU_fb_post_analyze <- paste(vodafoneAU_fb_posts$content, collapse = "\t")
+  
+  print(vodafoneAU_fb_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a set of posts, separated by tabs, about reactions and thoughts toward a telecommuniation brand - Vodafone AU.
+  Please analyse the posts and return up to 3 mutually exclusive themes that summarise content.
+  Please provide a theme title, description of the theme and 1 example post that relates to that theme.
+  If there is insufficient information to provide a title, description of the theme and an example, you can return less than 3 themes."
+  
+
+  # Call the completion API
+  vodafoneAU_fb_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = vodafoneAU_fb_post_analyze
+            )
+      ),
+    max_tokens = 500,  # You can adjust the number of tokens generated # 500
+    temperature = 0,
+  )
+
+
+```
+
+```{r}
+print(vodafoneAU_fb_posts_response$choices$message.content)
+```
+
+
+## FB Post Tagging - Vodafone AU
+```{r}
+
+vodafoneAU_fb_post_result <- data.frame(original_comment = character(0), model_response = character(0))
+
+# Loop through each row in the DataFrame
+for (i in 1:nrow(vodafoneAU_fb_posts)) {
+# Extract comment from the 'comment' column
+vodafoneAU_fb_post_analyze <- vodafoneAU_fb_posts$content[i]
+  
+  print(vodafoneAU_fb_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a post by a telecommuniation brand - Vodafone AU.
+  The system should assign an index to a set of columns corresponding to the theme categories below, effectively indicating the degree of each category's relevance to the post.
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance.
+  
+  These are the themes:
+
+  Theme 1: Exclusive Pre-Sale Access to Concerts
+  Description: Customers with Vodafone AU get exclusive pre-sale access to various concerts and events.
+
+  Theme 2: Brand Ambassadors and Partnerships
+  Description: Vodafone AU has partnerships with ambassadors and teams in the racing and music industries.
+
+  Theme 3: Vodafone Ticket - Exclusive Offers for Live Music
+  Description: Vodafone AU offers exclusive pre-sales, VIP experiences, and invites to see popular artists touring Australia through Vodafone Ticket.
+  
+  "
+  
+  # Call the completion API
+  vodafoneAU_fb_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = vodafoneAU_fb_post_analyze
+            )
+      ),
+    max_tokens = 250,  # You can adjust the number of tokens generated up to 500
+    temperature = 0
+  )
+
+  vodafoneAU_fb_post_result <- rbind(vodafoneAU_fb_post_result, data.frame(original_comment = vodafoneAU_fb_post_analyze, model_response = vodafoneAU_fb_posts_response$choices$message.content))
+  
+}  
+  
+  print(vodafoneAU_fb_post_result)
+
+```
+
+
+
+## FB Post Grouping - Amaysim
+```{r}
+  
+  amaysim_fb_post_analyze <- paste(amaysim_fb_posts$content, collapse = "\t")
+  
+  print(amaysim_fb_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a set of posts, separated by tabs, about reactions and thoughts toward a telecommuniation brand - Amaysim.
+  Please analyse the posts and return up to 4 mutually exclusive themes that summarise content.
+  Please provide a theme title, description of the theme and 1 example post that relates to that theme.
+  If there is insufficient information to provide a title, description of the theme and an example, you can return less than 4 themes."
+  
+
+  # Call the completion API
+  amaysim_fb_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = amaysim_fb_post_analyze
+            )
+      ),
+    max_tokens = 500,  # You can adjust the number of tokens generated # 500
+    temperature = 0,
+  )
+
+
+```
+
+```{r}
+print(amaysim_fb_posts_response$choices$message.content)
+```
+
+
+## FB Post Tagging - Amaysim
+```{r}
+
+amaysim_fb_post_result <- data.frame(original_comment = character(0), model_response = character(0))
+
+# Loop through each row in the DataFrame
+for (i in 1:nrow(amaysim_fb_posts)) {
+# Extract comment from the 'comment' column
+amaysim_fb_post_analyze <- amaysim_fb_posts$content[i]
+  
+  print(amaysim_fb_post_analyze)
+  # Provide a prompt asking GPT-3.5-turbo to identify themes
+  prompt_groups <- "You will be shown a post by a telecommuniation brand - Amaysi,.
+  The system should assign an index to a set of columns corresponding to the theme categories below, effectively indicating the degree of each category's relevance to the post.
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance.
+  
+  These are the themes:
+
+  Theme 1: Customer Appreciation and Engagement
+  Description: This theme includes posts that express gratitude towards customers, encourage engagement with the brand, and promote a sense of community.
+
+  Theme 2: Product and Service Updates
+  Description: This theme includes posts that announce new products, services, or features offered by Amaysim.
+  
+  Theme 3: Promotions and Discounts
+  Description: This theme includes posts that promote special offers, discounts, and promotions for Amaysim products and services.
+
+  Theme 4: Social Responsibility and Charity
+  Description: This theme includes posts that highlight Amaysim's involvement in social causes, charity work, and community initiatives.
+  
+  "
+  
+  # Call the completion API
+  amaysim_fb_posts_response <- create_chat_completion(
+    model = "gpt-3.5-turbo",
+    messages = 
+      list(
+            list(
+                  "role" = "system",
+                  "content" = prompt_groups
+            ),
+            list(
+                  "role" = "user",
+                  "content" = amaysim_fb_post_analyze
+            )
+      ),
+    max_tokens = 350,  # You can adjust the number of tokens generated up to 500
+    temperature = 0
+  )
+
+  amaysim_fb_post_result <- rbind(amaysim_fb_post_result, data.frame(original_comment = amaysim_fb_post_analyze, model_response = amaysim_fb_posts_response$choices$message.content))
+  
+}  
+  
+  print(amaysim_fb_post_result)
+
+```
+
+
+## ----------------------------------------------
 
 ## Export Excel
 
 ```{r}
 
-write.xlsx(telstra_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/sentiment_result_data/Instagram/telstra_ig_post_result.xlsx', rowNames=FALSE)
+## ------------------------- For Instagram
 
-write.xlsx(optus_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/sentiment_result_data/Instagram/optus_ig_post_result.xlsx', rowNames=FALSE)
+write.xlsx(telstra_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/Instagram/telstra_ig_post_result.xlsx', rowNames=FALSE)
 
-write.xlsx(vodafoneAU_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/sentiment_result_data/Instagram/vodafoneAU_ig_post_result.xlsx', rowNames=FALSE)
+write.xlsx(optus_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/Instagram/optus_ig_post_result.xlsx', rowNames=FALSE)
 
-write.xlsx(amaysim_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/sentiment_result_data/Instagram/amaysim_ig_post_result.xlsx', rowNames=FALSE)
+write.xlsx(vodafoneAU_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/Instagram/vodafoneAU_ig_post_result.xlsx', rowNames=FALSE)
+
+write.xlsx(amaysim_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/Instagram/amaysim_ig_post_result.xlsx', rowNames=FALSE)
+
+## ------------------------- For Facebook
+
+write.xlsx(telstra_fb_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/Facebook/telstra_fb_post_result.xlsx', rowNames=FALSE)
+
+write.xlsx(optus_fb_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/Facebook/optus_fb_post_result.xlsx', rowNames=FALSE)
+
+write.xlsx(vodafoneAU_fb_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/Facebook/vodafoneAU_fb_post_result.xlsx', rowNames=FALSE)
+
+write.xlsx(amaysim_fb_post_result, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/Facebook/amaysim_fb_post_result.xlsx', rowNames=FALSE)
 
 ```
 
@@ -768,25 +1038,20 @@ write.xlsx(amaysim_ig_post_result, file='/Users/Magic/Desktop/Bus-Analytics Stud
 
 ## Analysis
 
-## Load back themes data
+## Load back themes data for IG
 
 ```{r}
-telstra_ig_post_analysis <- read.xlsx("sentiment_result_data/Instagram/telstra_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+telstra_ig_post_analysis <- read.xlsx("nlp_result_data/Instagram/telstra_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
 
-optus_ig_post_analysis <- read.xlsx("sentiment_result_data/Instagram/optus_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+optus_ig_post_analysis <- read.xlsx("nlp_result_data/Instagram/optus_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
 
-vodafoneAU_ig_post_analysis <- read.xlsx("sentiment_result_data/Instagram/vodafoneAU_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+vodafoneAU_ig_post_analysis <- read.xlsx("nlp_result_data/Instagram/vodafoneAU_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
 
-amaysim_ig_post_analysis <- read.xlsx("sentiment_result_data/Instagram/amaysim_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+amaysim_ig_post_analysis <- read.xlsx("nlp_result_data/Instagram/amaysim_ig_post_result.xlsx") %>% rename("post_caption" = "original_comment")
 ```
 
-## Wrangling Numerical Value
 
-```{r}
-
-```
-
-## Join back
+## Join back for IG
 ```{r}
 telstra_ig_post_analysis_result <- left_join(telstra_ig_post_analysis, ig_posts, by = c("post_caption" = "post_caption")) %>%
   filter(str_length(post_caption) >= 20) %>% 
@@ -795,6 +1060,8 @@ telstra_ig_post_analysis_result <- left_join(telstra_ig_post_analysis, ig_posts,
 telstra_ig_post_analysis_result$numbers <- as.numeric(gsub(",", "", telstra_ig_post_analysis_result$numbers))
 
 telstra_ig_post_analysis_result <- telstra_ig_post_analysis_result[order(-telstra_ig_post_analysis_result$numbers), ]
+
+telstra_ig_post_analysis_result_top <- head(telstra_ig_post_analysis_result, 10)
 
 ## -------------------
 
@@ -806,6 +1073,8 @@ optus_ig_post_analysis_result$numbers <- as.numeric(gsub(",", "", optus_ig_post_
 
 optus_ig_post_analysis_result <- optus_ig_post_analysis_result[order(-optus_ig_post_analysis_result$numbers), ]
 
+optus_ig_post_analysis_result_top <- head(optus_ig_post_analysis_result, 10)
+
 ## -------------------
 
 vodafoneAU_ig_post_analysis_result <- left_join(vodafoneAU_ig_post_analysis, ig_posts, by = c("post_caption" = "post_caption")) %>%
@@ -815,6 +1084,8 @@ vodafoneAU_ig_post_analysis_result <- left_join(vodafoneAU_ig_post_analysis, ig_
 vodafoneAU_ig_post_analysis_result$numbers <- as.numeric(gsub(",", "", vodafoneAU_ig_post_analysis_result$numbers))
 
 vodafoneAU_ig_post_analysis_result <- vodafoneAU_ig_post_analysis_result[order(-vodafoneAU_ig_post_analysis_result$numbers), ]
+
+vodafoneAU_ig_post_analysis_result_top <- head(vodafoneAU_ig_post_analysis_result, 10)
 
 ## -------------------
 
@@ -826,8 +1097,160 @@ amaysim_ig_post_analysis_result$numbers <- as.numeric(gsub(",", "", amaysim_ig_p
 
 amaysim_ig_post_analysis_result <- amaysim_ig_post_analysis_result[order(-amaysim_ig_post_analysis_result$numbers), ]
 
+amaysim_ig_post_analysis_result_top <- head(amaysim_ig_post_analysis_result, 10)
+
+```
+
+
+# Export IG Top Result
+```{r}
+# telstra_ig_post_analysis_result_top
+# optus_ig_post_analysis_result_top
+# vodafoneAU_ig_post_analysis_result_top
+# amaysim_ig_post_analysis_result_top
+
+write.xlsx(telstra_ig_post_analysis_result_top, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/top_post_ig_result/telstra_ig_post_analysis_result_top.xlsx', rowNames=FALSE)
+
+write.xlsx(optus_ig_post_analysis_result_top, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/top_post_ig_result/optus_ig_post_analysis_result_top.xlsx', rowNames=FALSE)
+
+write.xlsx(vodafoneAU_ig_post_analysis_result_top, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/top_post_ig_result/vodafoneAU_ig_post_analysis_result_top.xlsx', rowNames=FALSE)
+
+write.xlsx(amaysim_ig_post_analysis_result_top, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/top_post_ig_result/amaysim_ig_post_analysis_result_top.xlsx', rowNames=FALSE)
+```
+
+# Load back top post IG
+```{r}
+telstra_ig_post_top_result <- read.xlsx("nlp_result_data/top_post_ig_result/telstra_ig_post_analysis_result_top.xlsx")
+
+optus_ig_post_top_result <- read.xlsx("nlp_result_data/top_post_ig_result/optus_ig_post_analysis_result_top.xlsx")
+
+vodafoneAU_ig_post_top_result <- read.xlsx("nlp_result_data/top_post_ig_result/vodafoneAU_ig_post_analysis_result_top.xlsx")
+
+amaysim_ig_post_top_result <- read.xlsx("nlp_result_data/top_post_ig_result/amaysim_ig_post_analysis_result_top.xlsx")
+
+## Show result
+
+kable(telstra_ig_post_top_result) %>% 
+  kable_styling()
+
+kable(optus_ig_post_top_result) %>% 
+  kable_styling()
+
+kable(vodafoneAU_ig_post_top_result) %>% 
+  kable_styling()
+
+kable(amaysim_ig_post_top_result) %>% 
+  kable_styling()
 ```
 
 
 
 
+## -----------------------
+
+
+
+## Load back themes data for FB
+
+```{r}
+telstra_fb_post_analysis <- read.xlsx("nlp_result_data/Facebook/telstra_fb_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+
+optus_fb_post_analysis <- read.xlsx("nlp_result_data/Facebook/optus_fb_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+
+vodafoneAU_fb_post_analysis <- read.xlsx("nlp_result_data/Facebook/vodafoneAU_fb_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+
+amaysim_fb_post_analysis <- read.xlsx("nlp_result_data/Facebook/amaysim_fb_post_result.xlsx") %>% rename("post_caption" = "original_comment")
+```
+
+
+## Join back for IG
+```{r}
+telstra_fb_post_analysis_result <- left_join(telstra_fb_post_analysis, fb_posts, by = c("post_caption" = "content")) %>%
+  filter(str_length(post_caption) >= 20) %>% 
+  select(c(post_caption, model_response, reactions, comments, shares))
+
+telstra_fb_post_analysis_result$reactions <- as.numeric(gsub(",", "", telstra_fb_post_analysis_result$reactions))
+
+telstra_fb_post_analysis_result <- telstra_fb_post_analysis_result[order(-telstra_fb_post_analysis_result$reactions), ]
+
+telstra_fb_post_analysis_result_top <- head(telstra_fb_post_analysis_result, 10)
+
+## -------------------
+
+optus_fb_post_analysis_result <- left_join(optus_fb_post_analysis, fb_posts, by = c("post_caption" = "content")) %>%
+  filter(str_length(post_caption) >= 20) %>% 
+  select(c(post_caption, model_response, reactions, comments, shares))
+
+optus_fb_post_analysis_result$reactions <- as.numeric(gsub(",", "", optus_fb_post_analysis_result$reactions)) 
+
+optus_fb_post_analysis_result <- optus_fb_post_analysis_result[order(-optus_fb_post_analysis_result$reactions), ]
+
+optus_fb_post_analysis_result_top <- head(optus_fb_post_analysis_result, 10)
+
+## -------------------
+
+vodafoneAU_fb_post_analysis_result <- left_join(vodafoneAU_fb_post_analysis, fb_posts, by = c("post_caption" = "content")) %>%
+  filter(str_length(post_caption) >= 20) %>% 
+  select(c(post_caption, model_response, reactions, comments, shares))
+
+vodafoneAU_fb_post_analysis_result$reactions <- as.numeric(gsub(",", "", vodafoneAU_fb_post_analysis_result$reactions))
+
+vodafoneAU_fb_post_analysis_result <- vodafoneAU_fb_post_analysis_result[order(-vodafoneAU_fb_post_analysis_result$reactions), ]
+
+vodafoneAU_fb_post_analysis_result_top <- head(vodafoneAU_fb_post_analysis_result, 10)
+
+## -------------------
+
+amaysim_fb_post_analysis_result <- left_join(amaysim_fb_post_analysis, fb_posts, by = c("post_caption" = "content")) %>%
+  filter(str_length(post_caption) >= 20) %>% 
+  select(c(post_caption, model_response, reactions, comments, shares))
+
+amaysim_fb_post_analysis_result$reactions <- as.numeric(gsub(",", "", amaysim_fb_post_analysis_result$reactions))
+
+amaysim_fb_post_analysis_result <- amaysim_fb_post_analysis_result[order(-amaysim_fb_post_analysis_result$reactions), ]
+
+amaysim_fb_post_analysis_result_top <- head(amaysim_fb_post_analysis_result, 10)
+
+```
+
+
+# Export IG Top Result
+```{r}
+# telstra_fb_post_analysis_result_top
+# optus_fb_post_analysis_result_top
+# vodafoneAU_fb_post_analysis_result_top
+# amaysim_fb_post_analysis_result_top
+
+write.xlsx(telstra_fb_post_analysis_result_top, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/top_post_fb_result/telstra_fb_post_analysis_result_top.xlsx', rowNames=FALSE)
+
+write.xlsx(optus_fb_post_analysis_result_top, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/top_post_fb_result/optus_fb_post_analysis_result_top.xlsx', rowNames=FALSE)
+
+write.xlsx(vodafoneAU_fb_post_analysis_result_top, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/top_post_fb_result/vodafoneAU_fb_post_analysis_result_top.xlsx', rowNames=FALSE)
+
+write.xlsx(amaysim_fb_post_analysis_result_top, file='/Users/Magic/Desktop/Bus-Analytics Study Materials/Semester 2_2023/ETC5543 - Business Analytics Creative Activity/Forethought/Main Project/GitHub/Pre-Analysis/nlp_result_data/top_post_fb_result/amaysim_fb_post_analysis_result_top.xlsx', rowNames=FALSE)
+```
+
+# Load back top post IG
+```{r}
+telstra_fb_post_top_result <- read.xlsx("nlp_result_data/top_post_fb_result/telstra_fb_post_analysis_result_top.xlsx")
+
+optus_fb_post_top_result <- read.xlsx("nlp_result_data/top_post_fb_result/optus_fb_post_analysis_result_top.xlsx")
+
+vodafoneAU_fb_post_top_result <- read.xlsx("nlp_result_data/top_post_fb_result/vodafoneAU_fb_post_analysis_result_top.xlsx")
+
+amaysim_fb_post_top_result <- read.xlsx("nlp_result_data/top_post_fb_result/amaysim_fb_post_analysis_result_top.xlsx")
+
+## Show result
+
+kable(telstra_ig_post_top_result) %>% 
+  kable_styling()
+
+kable(optus_fb_post_top_result) %>% 
+  kable_styling()
+
+kable(vodafoneAU_fb_post_top_result) %>% 
+  kable_styling()
+
+kable(amaysim_fb_post_top_result) %>% 
+  kable_styling()
+```

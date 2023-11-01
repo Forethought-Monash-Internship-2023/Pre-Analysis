@@ -1,0 +1,43 @@
+---
+title: "NLP_Theme_Analysis"
+author: "Chatpisut Makornkhan"
+date: "2023-10-15"
+output: html_document
+---
+
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(tidytext)
+library(stringr)
+library(lubridate)
+library(ggplot2)
+library(wordcloud)
+library(wordcloud2)
+library(reshape2)
+library(mice)
+library(openai)
+library(openxlsx)
+```
+
+
+```{r}
+prompt_groups <- prompt_groups <- "You will be shown a comment toward a post by a telecommuniation brand - Optus.
+  The system should assign an index to a set of sentiments corresponding to 'positive', 'neutral', and 'negative'
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance. "
+```
+
+```{r}
+prompt_groups <- "You will be shown a set of comments, separated by tabs, about reactions and thoughts toward a post by telecommuniation brand - Optus.
+  Please analyse the comment and return up to 3 mutually exclusive themes that summarise content.
+  Please provide a theme title, description of the theme and 1 example comment that relates to that theme.
+  If there is insufficient information to provide a title, description of the theme and an example, you can return less than 3 themes."
+```
+
+```{r}
+prompt_groups <- prompt_groups <- "You will be shown a comment toward a post by a telecommuniation brand - Optus.
+  The system should assign an index to a set of columns corresponding to the theme categories below, effectively indicating the degree of each category's relevance to the post.
+    Ensure that each category’s value lies between 0 and 100, where 100 is of a high degree of relevance and 0 is of no relevance.
+```
+
