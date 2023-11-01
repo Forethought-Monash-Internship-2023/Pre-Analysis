@@ -24,9 +24,8 @@ library(janitor)
 library(rsample)
 library(tidymodels)
 library(caret)
-library(ranger)
-library(gbm)
-library(xgboost)
+library(tidygraph)
+library(ggraph)
 ```
 
 
@@ -103,7 +102,7 @@ IG_postcomt <- IG_postcomt %>%
 
 # Analysis
 
-## IG_post wordcloud --- plan A
+## IG_post wordcloud --- plan A --- Need!
 
 ```{r}
 stopword <- get_stopwords(source = "snowball")
@@ -132,7 +131,7 @@ IG_post_word %>%
              shape = "circle")
 ```
 
-## FB_post wordcloud --- plan A
+## FB_post wordcloud --- plan A --- Need!
 
 ```{r}
 FB_post_word <- FB_postcomt %>%
@@ -153,11 +152,12 @@ FB_post_word %>%
              shape = "circle")
 ```
 
-## IG_post wordcloud --- plan B--Need
+## IG_post wordcloud --- plan B--Need, but Magic will do some changes.
 
 ```{r}
 library(wordcloud)
 IG_post_word %>%
+  filter(brand == "amaysim") %>%
   inner_join(get_sentiments("bing")) %>%
   count(word, sentiment, sort = T) %>%
   reshape2::acast(word ~ sentiment, 
@@ -167,7 +167,7 @@ IG_post_word %>%
                    max.words = 150)
 ```
 
-## IG_post wordcloud --- plan C
+## IG_post wordcloud --- plan C --- No need.
 
 ```{r}
 # %>% filter(brand == "Optus")
@@ -186,7 +186,7 @@ textplot_wordcloud(text_word,
                    rotation = F)
 ```
 
-## IG_post_date Total Number Analysis
+## IG_post_date Total Number Analysis --- No need.
 
 ```{r}
 IG_post_wday <- IG_postcomt %>%
@@ -213,7 +213,7 @@ IG_post_wday %>%
   theme_minimal()
 ```
 
-## IG_post_date Number of Different Brands
+## IG_post_date Number of Different Brands --- to do some changes add into R shiny.
 
 ```{r}
 IG_post_wday %>%
@@ -235,7 +235,7 @@ IG_post_wday %>%
   theme_minimal()
 ```
 
-## FB_post_date Total Number Analysis
+## FB_post_date Total Number Analysis -- No need.
 
 ```{r}
 FB_post_wday <- FB_postcomt %>%
@@ -261,7 +261,7 @@ FB_post_wday %>%
   theme_minimal()
 ```
 
-## FB_post_date Number of Different Brands
+## FB_post_date Number of Different Brands -- to do some changes add into R shiny.
 
 ```{r}
 FB_post_wday %>%
@@ -284,7 +284,7 @@ FB_post_wday %>%
   theme_minimal()
 ```
 
-## IG_post Sentiment Analysis
+## IG_post Sentiment Analysis --- Need!
 
 ```{r}
 IG_post_word %>%
@@ -313,7 +313,7 @@ IG_post_word %>%
   labs(x = "Date")
 ```
 
-## FB_post Sentiment Analysis-Need
+## FB_post Sentiment Analysis --- Need!
 
 ```{r}
 FB_post_word %>%
@@ -343,8 +343,11 @@ FB_post_word %>%
   labs(x = "Hour")
 ```
 
+
 ## IG_commont Sentiment Analysis
-### wordcloud--No need
+
+### wordcloud--No need, use the planB.
+
 ```{r}
 stopword <- get_stopwords(source = "snowball")
 
@@ -371,7 +374,7 @@ IG_com_word %>%
              shape = "circle")
 ```
 
-### Need
+### Coloumn plot about different sentiments in comments --- No Need.
 
 ```{r}
 theme_lyrics <- function(aticks = element_blank(),
@@ -387,7 +390,6 @@ theme_lyrics <- function(aticks = element_blank(),
 }
 ```
 
-### No need
 ```{r}
 library(textdata)
 IG_com_word %>%
@@ -408,7 +410,7 @@ IG_com_word %>%
   coord_flip()
 ```
 
-### Need
+### Donut plot about proportion of sentiments in comments --- Need
 ```{r}
 library(webr)
 IG_com_word %>%
@@ -419,7 +421,7 @@ IG_com_word %>%
            r0 = 0.82)
 ```
 
-### network
+### Bigram Network (basic processing, complete in R shiny code)--- Need!
 ```{r}
 IG_com_bigrams <- IG_Telco_posts_clean %>%
   inner_join(IG_Telco_comments_clean, by = "post_url") %>%
@@ -436,34 +438,10 @@ IG_com_bigrams <- IG_Telco_posts_clean %>%
   filter(!word1 %in% stopword$word) %>%
   filter(!word2 %in% stopword$word) %>%
   count(word1, word2, sort = T)
-  
 ```
 
 
-```{r}
-library(tidygraph)
-library(ggraph)
-IG_bigram_graph <- IG_com_bigrams %>%
-  top_n(60) %>%
-  graph_from_data_frame()
-IG_bigram_graph
-```
-
-
-```{r}
-set.seed(2017)
-ggraph(IG_bigram_graph, layout = "fr") +
-  geom_edge_link() +
-  geom_edge_density(aes(fill = n)) +
-  geom_node_point(color = "purple1", size = 1.2) +
-  geom_node_text(aes(label = name),  repel = TRUE) +
-  theme_void() + theme(legend.position = "none",
-                       plot.title = element_text(hjust = 0.5)) +
-  ggtitle("Bigram Network")
-```
-
-
-### tf-idf table-Need
+### tf-idf table --- Need!
 ```{r}
 IG_com_word %>%
   anti_join(stopword) %>%
@@ -475,12 +453,10 @@ IG_com_word %>%
   arrange(desc(tf_idf)) %>%
   filter(tf_idf >= 0.01) %>%
   mutate_at(vars(tf, idf, tf_idf), funs(round(., 5)))
-
-round(dt[4:6], 4)
 # High value means that word has a high frequency within a document but is quite rare over all documents. If a word occurs in a lot of documents idf will be close to zero, so `tf_idf` value will be small.
 ```
 
-# the histogram of themes -- need
+## The histogram of themes -- Need!
 ```{r}
 library(readxl)
 FB_amaysim <- read_excel("result_for_histogram/Facebook/amaysim_fb_post_hist.xlsx")
@@ -549,7 +525,7 @@ FB_his %>%
 ## Comparison between brands
 
 
-## Try to use LDA to extract the themes of texts -- no working
+## Try to use LDA to extract the themes of texts -- No working
 ```{r}
 library(rtweet)
 library(httr)
